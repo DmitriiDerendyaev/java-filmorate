@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.model;
 
 import lombok.Data;
 
+import javax.lang.model.type.UnionType;
 import javax.validation.constraints.*;
 import java.time.Duration;
 import java.time.LocalDate;
@@ -21,7 +22,13 @@ public class Film {
     @Past(message = "Release must be in past")
     LocalDate releaseDate;
 
-    @Positive(message = "Duration must be positive")
     Duration duration;
 
+    public long getDuration() {
+        return duration.getSeconds();
+    }
+
+    public Duration getDurationValue(){
+        return duration;
+    }
 }

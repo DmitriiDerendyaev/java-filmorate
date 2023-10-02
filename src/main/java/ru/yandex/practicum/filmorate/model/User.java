@@ -12,13 +12,13 @@ public class User{
     @NotBlank(message = "Email is required")
     String email;
     @NotBlank(message = "Login is required")
-    @Pattern(regexp = "^\\S+$", message = "Login cannot contain spaces")
+    @Pattern(regexp = "^[^\\s]+$", message = "Login cannot contain spaces")
     String login;
     String name;
-    @PastOrPresent(message = "Birthday cannot be in the future")
+    @Past(message = "Birthday cannot be in the future")
     LocalDate birthday;
 
-    public String getDisplayName() {
+    public String getName() {
         return (name != null && !name.isEmpty()) ? name : login;
     }
 }
