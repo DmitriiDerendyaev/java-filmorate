@@ -3,6 +3,7 @@ package ru.yandex.practicum.filmorate.controller;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.User;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,14 +21,14 @@ public class UserController {
     }
 
     @PostMapping()
-    public User addUser(@RequestBody User user){
+    public User addUser(@RequestBody @Valid User user){
         users.put(user.getId(), user);
 
         return user;
     }
 
     @PutMapping
-    public User updateUser(@RequestBody User user){
+    public User updateUser(@RequestBody @Valid User user){
         users.put(user.getId(), user);
 
         return user;
