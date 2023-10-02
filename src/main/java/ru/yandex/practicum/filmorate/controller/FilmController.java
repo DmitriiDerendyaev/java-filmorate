@@ -21,11 +21,12 @@ public class FilmController {
     public FilmController(FilmService filmService) {
         this.filmService = filmService;
     }
+
     private HashMap<Integer, Film> films = new HashMap<>();
     private int currentId = 1;
 
     @GetMapping()
-    public ResponseEntity<List<Film>> getAllFilms(){
+    public ResponseEntity<List<Film>> getAllFilms() {
         List<Film> filmList = filmService.getAllFilms();
         return ResponseEntity.ok(filmList);
     }
@@ -37,7 +38,7 @@ public class FilmController {
     }
 
     @PutMapping
-    public ResponseEntity<Film> updateFilm(@RequestBody @Valid Film film){
+    public ResponseEntity<Film> updateFilm(@RequestBody @Valid Film film) {
         Film updatedFilm = filmService.updateFilm(film);
         return ResponseEntity.ok(updatedFilm);
     }
