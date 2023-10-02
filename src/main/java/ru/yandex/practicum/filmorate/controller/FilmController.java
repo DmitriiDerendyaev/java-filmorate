@@ -2,17 +2,12 @@ package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exception.InvalidDurationException;
-import ru.yandex.practicum.filmorate.exception.InvalidFilm;
-import ru.yandex.practicum.filmorate.exception.InvalidReleaseDateException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
 
 import javax.validation.Valid;
-import java.time.Duration;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -30,18 +25,21 @@ public class FilmController {
     private int currentId = 1;
 
     @GetMapping()
-    public List<Film> getAllFilms(){
-        return filmService.getAllFilms();
+    public ResponseEntity<List<Film>> getAllFilms(){
+        List<Film> filmList = filmService.getAllFilms();
+        return ResponseEntity.ok(filmList);
     }
 
     @PostMapping
-    public Film addFilm(@RequestBody @Valid Film film) {
-        return filmService.addFilm(film);
+    public ResponseEntity<Film> addFilm(@RequestBody @Valid Film film) {
+        Film addedFilm = filmService.addFilm(film);
+        return ResponseEntity.ok(addedFilm);
     }
 
     @PutMapping
-    public Film updateFilm(@RequestBody @Valid Film film){
-        return filmService.updateFilm(film);
+    public ResponseEntity<Film> updateFilm(@RequestBody @Valid Film film){
+        Film updatedFilm = filmService.updateFilm(film);
+        return ResponseEntity.ok(updatedFilm);
     }
 
 }
