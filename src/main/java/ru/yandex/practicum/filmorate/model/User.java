@@ -8,7 +8,7 @@ import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
-public class User{
+public class User {
     int id;
     @Email(message = "Invalid email format")
     @NotBlank(message = "Email is required")

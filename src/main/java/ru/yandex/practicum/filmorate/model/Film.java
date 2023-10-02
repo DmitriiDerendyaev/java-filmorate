@@ -29,7 +29,7 @@ public class Film {
         return duration.getSeconds();
     }
 
-    public Duration getDurationValue(){
+    public Duration getDurationValue() {
         return duration;
     }
 }
