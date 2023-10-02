@@ -4,10 +4,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.NOT_FOUND)
-public class InvalidUser extends RuntimeException{
+public class InvalidUser extends RuntimeException {
 
 
-    public InvalidUser(String message){
+    public InvalidUser(String message) {
         super(message);
     }
 }
