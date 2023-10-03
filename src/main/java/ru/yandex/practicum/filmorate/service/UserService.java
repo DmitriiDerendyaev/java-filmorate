@@ -11,7 +11,9 @@ public class UserService extends AbstractService<User> {
 
     @Override
     public void validate(User data) {
-        if(data == null)
+        if(data == null) {
+            log.warn("Invalid user {}");
             throw new InvalidUser("Invalid user");
+        }
     }
 }
