@@ -9,45 +9,15 @@ import ru.yandex.practicum.filmorate.model.Film;
 
 import java.time.Duration;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 @Slf4j
 @Service
-public class FilmService {
-    private final HashMap<Integer, Film> films = new HashMap<>();
-    private int currentId = 1;
+public class FilmService extends AbstractService<Film> {
 
-    public List<Film> getAllFilms() {
-        log.info("Fetching all films");
-
-        return new ArrayList<>(films.values());
-    }
-
-    public Film addFilm(Film film) {
+    @Override
+    public void validate(Film film) {
         validateReleaseDate(film);
         validateDuration(film);
-
-        film.setId(currentId++);
-        log.info("Adding a new film: {}", film);
-
-        films.put(film.getId(), film);
-
-        return film;
-    }
-
-    public Film updateFilm(Film film) {
-        if (!films.containsKey(film.getId())) {
-            throw new InvalidFilm("Unknown film");
-        }
-        validateReleaseDate(film);
-        validateDuration(film);
-
-        films.put(film.getId(), film);
-        log.info("Update film {} to film: {} ", film, films.get(film.getId()));
-
-        return film;
     }
 
     private void validateReleaseDate(Film film) {

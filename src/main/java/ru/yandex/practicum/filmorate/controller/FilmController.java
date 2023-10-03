@@ -24,19 +24,19 @@ public class FilmController {
 
     @GetMapping()
     public ResponseEntity<List<Film>> getAllFilms() {
-        List<Film> filmList = filmService.getAllFilms();
+        List<Film> filmList = filmService.getAll();
         return ResponseEntity.ok(filmList);
     }
 
     @PostMapping
     public ResponseEntity<Film> addFilm(@RequestBody @Valid Film film) {
-        Film addedFilm = filmService.addFilm(film);
+        Film addedFilm = filmService.create(film);
         return ResponseEntity.ok(addedFilm);
     }
 
     @PutMapping
     public ResponseEntity<Film> updateFilm(@RequestBody @Valid Film film) {
-        Film updatedFilm = filmService.updateFilm(film);
+        Film updatedFilm = filmService.update(film);
         return ResponseEntity.ok(updatedFilm);
     }
 

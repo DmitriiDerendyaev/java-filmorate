@@ -24,19 +24,19 @@ public class UserController {
 
     @GetMapping()
     public ResponseEntity<List<User>> getAllUsers() {
-        List<User> userList = userService.getAllUsers();
+        List<User> userList = userService.getAll();
         return ResponseEntity.ok(userList);
     }
 
     @PostMapping()
     public ResponseEntity<User> addUser(@Valid @RequestBody User user) {
-        User addedUser = userService.addUser(user);
+        User addedUser = userService.create(user);
         return ResponseEntity.ok(addedUser);
     }
 
     @PutMapping
     public ResponseEntity<User> updateUser(@Valid @RequestBody User user) {
-        User updatedUser = userService.updateUser(user);
+        User updatedUser = userService.update(user);
         return ResponseEntity.ok(updatedUser);
     }
 }
