@@ -22,9 +22,6 @@ public class FilmController {
         this.filmService = filmService;
     }
 
-    private final HashMap<Integer, Film> films = new HashMap<>();
-    private final int currentId = 1;
-
     @GetMapping()
     public ResponseEntity<List<Film>> getAllFilms() {
         List<Film> filmList = filmService.getAllFilms();
