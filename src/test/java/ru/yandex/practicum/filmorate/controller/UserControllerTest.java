@@ -35,8 +35,18 @@ public class UserControllerTest {
     @Test
     public void testGetAllUsers() { // попытался разобраться с Мок тестированием, не знаю что из этого вышло
         List<User> users = new ArrayList<>();
-        users.add(new User(1, "mail1@mail.ru", "login1", "Name1", LocalDate.of(1990, 1, 1)));
-        users.add(new User(2, "mail2@mail.ru", "login2", "Name2", LocalDate.of(1985, 5, 15)));
+        users.add(User.builder()
+                .email("mail1@mail.ru")
+                .login("login1")
+                .name("Name1")
+                .birthday(LocalDate.of(1990, 1, 1))
+                .build());
+        users.add(User.builder()
+                .email("mail2@mail.ru")
+                .login("login2")
+                .name("Name2")
+                .birthday(LocalDate.of(1985, 5, 15))
+                .build());
 
         when(userService.getAllUsers()).thenReturn(users);
 
@@ -49,8 +59,19 @@ public class UserControllerTest {
 
     @Test
     public void testAddUser() {
-        User userToCreate = new User(1, "mail1@mail.ru", "login1", "Name1", LocalDate.of(1990, 1, 1));
-        User createdUser = new User(1, "mail1@mail.ru", "login1", "Name1", LocalDate.of(1990, 1, 1));
+        User userToCreate = User.builder()
+                .email("mail1@mail.ru")
+                .login("login1")
+                .name("Name1")
+                .birthday(LocalDate.of(1990, 1, 1))
+                .build();
+
+        User createdUser = User.builder()
+                .email("mail1@mail.ru")
+                .login("login1")
+                .name("Name1")
+                .birthday(LocalDate.of(1990, 1, 1))
+                .build();
 
         when(userService.addUser(userToCreate)).thenReturn(createdUser);
 
@@ -62,7 +83,12 @@ public class UserControllerTest {
 
     @Test
     public void testUpdateUser() {
-        User userToUpdate = new User(1, "mail1@mail.ru", "login1", "Name1", LocalDate.of(1990, 1, 1));
+        User userToUpdate = User.builder()
+                .email("mail1@mail.ru")
+                .login("login1")
+                .name("Name1")
+                .birthday(LocalDate.of(1990, 1, 1))
+                .build();
 
         when(userService.updateUser(userToUpdate)).thenReturn(userToUpdate);
 
@@ -74,7 +100,12 @@ public class UserControllerTest {
 
     @Test
     public void testUpdateUserInvalidUser() {
-        User validUser = new User(1, "valid@mail.ru", "valid", "Name1", LocalDate.of(1990, 1, 1));
+        User validUser = User.builder()
+                .email("valid@mail.ru")
+                .login("valid")
+                .name("Name1")
+                .birthday(LocalDate.of(1990, 1, 1))
+                .build();
 
         InvalidUser invalidUserException = assertThrows(InvalidUser.class, () -> {
             when(userService.updateUser(validUser)).thenThrow(new InvalidUser("Unknown user"));

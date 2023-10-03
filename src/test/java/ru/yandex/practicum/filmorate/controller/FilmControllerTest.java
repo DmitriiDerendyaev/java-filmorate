@@ -24,8 +24,18 @@ public class FilmControllerTest {
         FilmService filmService = Mockito.mock(FilmService.class);
 
         List<Film> films = new ArrayList<>();
-        films.add(new Film(1, "Film 1", "Description 1", LocalDate.now(), Duration.ofMinutes(120)));
-        films.add(new Film(2, "Film 2", "Description 2", LocalDate.now(), Duration.ofMinutes(90)));
+        films.add(Film.builder()
+                .name("Film 1")
+                .description("Description 1")
+                .releaseDate(LocalDate.now())
+                .duration(Duration.ofMinutes(120))
+                .build());
+        films.add(Film.builder()
+                .name("Film 2")
+                .description("Description 2")
+                .releaseDate(LocalDate.now())
+                .duration(Duration.ofMinutes(90))
+                .build());
 
         when(filmService.getAllFilms()).thenReturn(films);
 
@@ -41,7 +51,12 @@ public class FilmControllerTest {
     public void testAddFilm() {
         FilmService filmService = Mockito.mock(FilmService.class);
 
-        Film filmToAdd = new Film(1, "Film 1", "Description 1", LocalDate.now(), Duration.ofMinutes(120));
+        Film filmToAdd = Film.builder()
+                .name("Film 1")
+                .description("Description 1")
+                .releaseDate(LocalDate.now())
+                .duration(Duration.ofMinutes(120))
+                .build();
 
         when(filmService.addFilm(filmToAdd)).thenReturn(filmToAdd);
 
@@ -57,7 +72,12 @@ public class FilmControllerTest {
     public void testUpdateFilm() {
         FilmService filmService = Mockito.mock(FilmService.class);
 
-        Film filmToUpdate = new Film(1, "Updated Film", "Updated Description", LocalDate.now(), Duration.ofMinutes(150));
+        Film filmToUpdate = Film.builder()
+                .name("Updated Film")
+                .description("Updated Description")
+                .releaseDate(LocalDate.now())
+                .duration(Duration.ofMinutes(150))
+                .build();
 
         when(filmService.updateFilm(filmToUpdate)).thenReturn(filmToUpdate);
 
@@ -73,9 +93,14 @@ public class FilmControllerTest {
     public void testUpdateFilmInvalidFilm() {
         FilmService filmService = Mockito.mock(FilmService.class);
 
-        Film filmToUpdate = new Film(1, "Updated Film", "Updated Description", LocalDate.now(), Duration.ofMinutes(150));
+        Film filmToUpdate = Film.builder()
+                .name("Updated Film")
+                .description("Updated Description")
+                .releaseDate(LocalDate.now())
+                .duration(Duration.ofMinutes(150))
+                .build();
 
-        when(filmService.updateFilm(filmToUpdate)).thenThrow(new InvalidFilm("Unknown film"));
+        when(filmService.update(filmToUpdate)).thenThrow(new InvalidFilm("Unknown film"));
 
         FilmController filmController = new FilmController(filmService);
 

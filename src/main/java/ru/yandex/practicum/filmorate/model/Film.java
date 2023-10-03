@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.model;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -12,6 +13,7 @@ import java.time.LocalDate;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @AllArgsConstructor
+@Builder
 public class Film extends Entity{
 
     @NotNull
@@ -25,6 +27,7 @@ public class Film extends Entity{
     LocalDate releaseDate;
 
     Duration duration;
+
 
     public long getDuration() {
         return duration.getSeconds();
