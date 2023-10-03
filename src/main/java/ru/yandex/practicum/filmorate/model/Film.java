@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @Builder
-public class Film extends Entity{
+public class Film extends Entity {
 
     @NotNull
     @NotBlank(message = "Name is required")

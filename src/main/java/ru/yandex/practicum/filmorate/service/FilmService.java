@@ -3,7 +3,6 @@ package ru.yandex.practicum.filmorate.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.InvalidDurationException;
-import ru.yandex.practicum.filmorate.exception.InvalidFilm;
 import ru.yandex.practicum.filmorate.exception.InvalidReleaseDateException;
 import ru.yandex.practicum.filmorate.model.Film;
 
