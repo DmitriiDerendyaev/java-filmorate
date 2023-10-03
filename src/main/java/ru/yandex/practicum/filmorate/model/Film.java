@@ -2,16 +2,17 @@ package ru.yandex.practicum.filmorate.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.*;
 import java.time.Duration;
 import java.time.LocalDate;
 
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @AllArgsConstructor
-public class Film {
-    int id;
+public class Film extends Entity{
 
     @NotNull
     @NotBlank(message = "Name is required")
