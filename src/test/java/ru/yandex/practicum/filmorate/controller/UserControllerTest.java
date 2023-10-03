@@ -48,7 +48,7 @@ public class UserControllerTest {
                 .birthday(LocalDate.of(1985, 5, 15))
                 .build());
 
-        when(userService.getAllUsers()).thenReturn(users);
+        when(userService.getAll()).thenReturn(users);
 
         ResponseEntity<List<User>> responseEntity = userController.getAllUsers();
 
@@ -73,7 +73,8 @@ public class UserControllerTest {
                 .birthday(LocalDate.of(1990, 1, 1))
                 .build();
 
-        when(userService.addUser(userToCreate)).thenReturn(createdUser);
+
+        when(userService.create(userToCreate)).thenReturn(createdUser);
 
         ResponseEntity<User> responseEntity = userController.addUser(userToCreate);
 
@@ -90,7 +91,7 @@ public class UserControllerTest {
                 .birthday(LocalDate.of(1990, 1, 1))
                 .build();
 
-        when(userService.updateUser(userToUpdate)).thenReturn(userToUpdate);
+        when(userService.update(userToUpdate)).thenReturn(userToUpdate);
 
         ResponseEntity<User> responseEntity = userController.updateUser(userToUpdate);
 
@@ -108,7 +109,7 @@ public class UserControllerTest {
                 .build();
 
         InvalidUser invalidUserException = assertThrows(InvalidUser.class, () -> {
-            when(userService.updateUser(validUser)).thenThrow(new InvalidUser("Unknown user"));
+            when(userService.update(validUser)).thenThrow(new InvalidUser("Unknown user"));
             ResponseEntity<User> responseEntity = userController.updateUser(validUser);
         });
 

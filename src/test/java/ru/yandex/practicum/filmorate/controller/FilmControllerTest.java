@@ -37,7 +37,7 @@ public class FilmControllerTest {
                 .duration(Duration.ofMinutes(90))
                 .build());
 
-        when(filmService.getAllFilms()).thenReturn(films);
+        when(filmService.getAll()).thenReturn(films);
 
         FilmController filmController = new FilmController(filmService);
 
@@ -58,7 +58,7 @@ public class FilmControllerTest {
                 .duration(Duration.ofMinutes(120))
                 .build();
 
-        when(filmService.addFilm(filmToAdd)).thenReturn(filmToAdd);
+        when(filmService.create(filmToAdd)).thenReturn(filmToAdd);
 
         FilmController filmController = new FilmController(filmService);
 
@@ -79,7 +79,7 @@ public class FilmControllerTest {
                 .duration(Duration.ofMinutes(150))
                 .build();
 
-        when(filmService.updateFilm(filmToUpdate)).thenReturn(filmToUpdate);
+        when(filmService.update(filmToUpdate)).thenReturn(filmToUpdate);
 
         FilmController filmController = new FilmController(filmService);
 
