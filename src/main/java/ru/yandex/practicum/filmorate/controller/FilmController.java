@@ -44,4 +44,18 @@ public class FilmController {
         return ResponseEntity.ok(updatedFilm);
     }
 
+    @PutMapping("/films/{id}/like/{userId}")
+    public ResponseEntity<Long> addLike(@PathVariable Long id, @PathVariable Long userId){
+        return null;
+    }
+
+    @DeleteMapping("/films/{id}/like/{userId}")
+    public ResponseEntity<Long> deleteLike(@PathVariable Long id, @PathVariable Long userId){
+        return null;
+    }
+
+    @GetMapping("/films/popular")
+    public ResponseEntity<List<Long>> getFilms(@RequestParam Long count){
+        return null;
+    }
 }

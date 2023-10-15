@@ -44,4 +44,24 @@ public class UserController {
         User updatedUser = userStorage.update(user);
         return ResponseEntity.ok(updatedUser);
     }
+
+    @PutMapping("/{id}/friends/{friendId}")
+    public ResponseEntity<Long> addFriend(@PathVariable Long id, @PathVariable Long friendId){
+        return null;
+    }
+
+    @DeleteMapping("/{id}/friends/{friendId}")
+    public ResponseEntity<Long> deleteFriend(@PathVariable Long id, @PathVariable Long friendId){
+        return null;
+    }
+
+    @GetMapping("/users/{id}/friends")
+    public ResponseEntity<Long> getFriends(@PathVariable Long id){
+        return null;
+    }
+
+    @GetMapping("/users/{id}/friends/common/{otherId}")
+    public ResponseEntity<List<Long>> getMutualFriends(@PathVariable Long id, @PathVariable Long otherId){
+        return null;
+    }
 }
