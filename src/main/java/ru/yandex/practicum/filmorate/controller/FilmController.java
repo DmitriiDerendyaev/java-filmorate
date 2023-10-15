@@ -6,6 +6,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
+import ru.yandex.practicum.filmorate.storage.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
+import ru.yandex.practicum.filmorate.storage.StorageCRUD;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -14,28 +17,30 @@ import java.util.List;
 @RestController
 @RequestMapping("/films")
 public class FilmController {
-    private final FilmService filmService;
+
+    private final StorageCRUD<Film> filmStorage;
 
     @Autowired
-    public FilmController(FilmService filmService) {
-        this.filmService = filmService;
+    public FilmController(InMemoryFilmStorage inMemoryFilmStorage){
+        this.filmStorage = inMemoryFilmStorage;
     }
+
 
     @GetMapping()
     public ResponseEntity<List<Film>> getAllFilms() {
-        List<Film> filmList = filmService.getAll();
+        List<Film> filmList = filmStorage.getAll();
         return ResponseEntity.ok(filmList);
     }
 
     @PostMapping
     public ResponseEntity<Film> addFilm(@RequestBody @Valid Film film) {
-        Film addedFilm = filmService.create(film);
+        Film addedFilm = filmStorage.create(film);
         return ResponseEntity.ok(addedFilm);
     }
 
     @PutMapping
     public ResponseEntity<Film> updateFilm(@RequestBody @Valid Film film) {
-        Film updatedFilm = filmService.update(film);
+        Film updatedFilm = filmStorage.update(film);
         return ResponseEntity.ok(updatedFilm);
     }
 
