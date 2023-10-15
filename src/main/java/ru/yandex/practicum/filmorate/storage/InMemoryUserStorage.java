@@ -8,7 +8,7 @@ import ru.yandex.practicum.filmorate.model.User;
 
 @Component
 @Slf4j
-public class InMemoryUserStorage extends AbstractStorage<User> implements UserStorage{
+public class InMemoryUserStorage extends AbstractStorage<User> implements UserStorage<User>{
     @Override
     public void validate(User data) {
         if (data == null) {
