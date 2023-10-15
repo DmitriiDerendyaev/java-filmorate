@@ -7,12 +7,7 @@ import ru.yandex.practicum.filmorate.model.User;
 
 @Slf4j
 @Service
-public class UserService extends AbstractService<User> {
+public class UserService  {
 
-    @Override
-    public void validate(User data) {
-        if (data == null) {
-            throw new InvalidUser("Invalid user");
-        }
-    }
+
 }
