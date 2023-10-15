@@ -6,7 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import ru.yandex.practicum.filmorate.exception.InvalidFilm;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.service.FilmService;
+import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
+import ru.yandex.practicum.filmorate.storage.StorageCRUD;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -21,7 +22,7 @@ public class FilmControllerTest {
 
     @Test
     public void testGetAllFilms() {
-        FilmService filmService = Mockito.mock(FilmService.class);
+        StorageCRUD<Film> filmStorage = Mockito.mock(InMemoryFilmStorage.class);
 
         List<Film> films = new ArrayList<>();
         films.add(Film.builder()
@@ -37,9 +38,9 @@ public class FilmControllerTest {
                 .duration(Duration.ofMinutes(90))
                 .build());
 
-        when(filmService.getAll()).thenReturn(films);
+        when(filmStorage.getAll()).thenReturn(films);
 
-        FilmController filmController = new FilmController(filmService);
+        FilmController filmController = new FilmController((InMemoryFilmStorage) filmStorage);
 
         ResponseEntity<List<Film>> responseEntity = filmController.getAllFilms();
 
@@ -49,7 +50,7 @@ public class FilmControllerTest {
 
     @Test
     public void testAddFilm() {
-        FilmService filmService = Mockito.mock(FilmService.class);
+        StorageCRUD<Film> filmStorage = Mockito.mock(InMemoryFilmStorage.class);
 
         Film filmToAdd = Film.builder()
                 .name("Film 1")
@@ -58,9 +59,9 @@ public class FilmControllerTest {
                 .duration(Duration.ofMinutes(120))
                 .build();
 
-        when(filmService.create(filmToAdd)).thenReturn(filmToAdd);
+        when(filmStorage.create(filmToAdd)).thenReturn(filmToAdd);
 
-        FilmController filmController = new FilmController(filmService);
+        FilmController filmController = new FilmController((InMemoryFilmStorage) filmStorage);
 
         ResponseEntity<Film> responseEntity = filmController.addFilm(filmToAdd);
 
@@ -70,7 +71,7 @@ public class FilmControllerTest {
 
     @Test
     public void testUpdateFilm() {
-        FilmService filmService = Mockito.mock(FilmService.class);
+        StorageCRUD<Film> filmStorage = Mockito.mock(InMemoryFilmStorage.class);
 
         Film filmToUpdate = Film.builder()
                 .name("Updated Film")
@@ -79,9 +80,9 @@ public class FilmControllerTest {
                 .duration(Duration.ofMinutes(150))
                 .build();
 
-        when(filmService.update(filmToUpdate)).thenReturn(filmToUpdate);
+        when(filmStorage.update(filmToUpdate)).thenReturn(filmToUpdate);
 
-        FilmController filmController = new FilmController(filmService);
+        FilmController filmController = new FilmController((InMemoryFilmStorage) filmStorage);
 
         ResponseEntity<Film> responseEntity = filmController.updateFilm(filmToUpdate);
 
@@ -91,7 +92,7 @@ public class FilmControllerTest {
 
     @Test
     public void testUpdateFilmInvalidFilm() {
-        FilmService filmService = Mockito.mock(FilmService.class);
+        StorageCRUD<Film> filmStorage = Mockito.mock(InMemoryFilmStorage.class);
 
         Film filmToUpdate = Film.builder()
                 .name("Updated Film")
@@ -100,9 +101,9 @@ public class FilmControllerTest {
                 .duration(Duration.ofMinutes(150))
                 .build();
 
-        when(filmService.update(filmToUpdate)).thenThrow(new InvalidFilm("Unknown film"));
+        when(filmStorage.update(filmToUpdate)).thenThrow(new InvalidFilm("Unknown film"));
 
-        FilmController filmController = new FilmController(filmService);
+        FilmController filmController = new FilmController((InMemoryFilmStorage) filmStorage);
 
         InvalidFilm invalidFilmException = assertThrows(InvalidFilm.class, () -> {
             filmController.updateFilm(filmToUpdate);
