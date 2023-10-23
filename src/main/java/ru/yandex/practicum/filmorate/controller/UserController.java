@@ -14,54 +14,61 @@ import ru.yandex.practicum.filmorate.storage.StorageCRUD;
 import javax.validation.ReportAsSingleViolation;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @RestController
 @RequestMapping("/users")
 public class UserController {
 
-    private final StorageCRUD<User> userStorage;
+    private final UserService userService;
 
     @Autowired
-    public UserController(InMemoryUserStorage inMemoryUserStorage){
-        this.userStorage = inMemoryUserStorage;
+    public UserController(UserService userService){
+        this.userService = userService;
     }
 
     @GetMapping()
     public ResponseEntity<List<User>> getAllUsers() {
-        List<User> userList = userStorage.getAll();
+        List<User> userList = userService.getAll();
         return ResponseEntity.ok(userList);
     }
 
     @PostMapping()
     public ResponseEntity<User> addUser(@Valid @RequestBody User user) {
-        User addedUser = userStorage.create(user);
+        User addedUser = userService.create(user);
         return ResponseEntity.ok(addedUser);
     }
 
     @PutMapping
     public ResponseEntity<User> updateUser(@Valid @RequestBody User user) {
-        User updatedUser = userStorage.update(user);
+        User updatedUser = userService.update(user);
         return ResponseEntity.ok(updatedUser);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<User> getUserById(@PathVariable Long id){
+        System.out.printf(userService.getUserById(id).toString());
+        return ResponseEntity.ok(userService.getUserById(id));
+    }
+
     @PutMapping("/{id}/friends/{friendId}")
-    public ResponseEntity<Long> addFriend(@PathVariable Long id, @PathVariable Long friendId){
-        return null;
+    public ResponseEntity<User> addFriend(@PathVariable Long id, @PathVariable Long friendId){
+        return ResponseEntity.ok(userService.addFriend(id, friendId));
     }
 
     @DeleteMapping("/{id}/friends/{friendId}")
-    public ResponseEntity<Long> deleteFriend(@PathVariable Long id, @PathVariable Long friendId){
-        return null;
+    public ResponseEntity<User> deleteFriend(@PathVariable Long id, @PathVariable Long friendId){
+        return ResponseEntity.ok(userService.deleteFriend(id, friendId));
     }
 
-    @GetMapping("/users/{id}/friends")
-    public ResponseEntity<Long> getFriends(@PathVariable Long id){
-        return null;
+    @GetMapping("/{id}/friends")
+    public ResponseEntity<List<User>> getFriends(@PathVariable Long id){
+        return ResponseEntity.ok(userService.getFriendsList(id));
     }
 
-    @GetMapping("/users/{id}/friends/common/{otherId}")
-    public ResponseEntity<List<Long>> getMutualFriends(@PathVariable Long id, @PathVariable Long otherId){
-        return null;
+    @GetMapping("/{id}/friends/common/{otherId}")
+    public ResponseEntity<List<User>> getMutualFriends(@PathVariable Long id, @PathVariable Long otherId){
+        return ResponseEntity.ok(userService.getCommonFriends(id, otherId));
     }
 }
