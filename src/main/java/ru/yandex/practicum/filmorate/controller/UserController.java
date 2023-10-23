@@ -19,7 +19,7 @@ public class UserController {
     private final UserService userService;
 
     @Autowired
-    public UserController(UserService userService){
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 
@@ -48,22 +48,22 @@ public class UserController {
     }
 
     @PutMapping("/{id}/friends/{friendId}")
-    public ResponseEntity<User> addFriend(@PathVariable Long id, @PathVariable Long friendId){
+    public ResponseEntity<User> addFriend(@PathVariable Long id, @PathVariable Long friendId) {
         return ResponseEntity.ok(userService.addFriend(id, friendId));
     }
 
     @DeleteMapping("/{id}/friends/{friendId}")
-    public ResponseEntity<User> deleteFriend(@PathVariable Long id, @PathVariable Long friendId){
+    public ResponseEntity<User> deleteFriend(@PathVariable Long id, @PathVariable Long friendId) {
         return ResponseEntity.ok(userService.deleteFriend(id, friendId));
     }
 
     @GetMapping("/{id}/friends")
-    public ResponseEntity<List<User>> getFriends(@PathVariable Long id){
+    public ResponseEntity<List<User>> getFriends(@PathVariable Long id) {
         return ResponseEntity.ok(userService.getFriendsList(id));
     }
 
     @GetMapping("/{id}/friends/common/{otherId}")
-    public ResponseEntity<List<User>> getMutualFriends(@PathVariable Long id, @PathVariable Long otherId){
+    public ResponseEntity<List<User>> getMutualFriends(@PathVariable Long id, @PathVariable Long otherId) {
         return ResponseEntity.ok(userService.getCommonFriends(id, otherId));
     }
 }
