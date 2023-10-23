@@ -16,27 +16,27 @@ public class UserService  {
     private final UserStorage<User> inMemoryUserStorage;
 
     @Autowired
-    public UserService (InMemoryUserStorage inMemoryUserStorage){
+    public UserService (InMemoryUserStorage inMemoryUserStorage) {
         this.inMemoryUserStorage = inMemoryUserStorage;
     }
 
-    public List<User> getAll(){
+    public List<User> getAll() {
         return inMemoryUserStorage.getAll();
     }
 
-    public User create(User user){
+    public User create(User user) {
         return inMemoryUserStorage.create(user);
     }
 
-    public User update(User user){
+    public User update(User user) {
         return inMemoryUserStorage.update(user);
     }
 
-    public User getUserById(Long id){
+    public User getUserById(Long id) {
         return inMemoryUserStorage.getById(id);
     }
 
-    public List<User> getFriendsList(Long id){
+    public List<User> getFriendsList(Long id) {
         List<User> friendsList = new ArrayList<>();
         User user = inMemoryUserStorage.getById(id);
 
@@ -51,7 +51,7 @@ public class UserService  {
         User user = inMemoryUserStorage.getById(userId);
         User friend = inMemoryUserStorage.getById(friendId);
 
-        if(user != null && friend != null){
+        if (user != null && friend != null) {
             user.addFriend(friendId);
             friend.addFriend(userId);
 
@@ -66,7 +66,7 @@ public class UserService  {
         User user = inMemoryUserStorage.getById(userId);
         User friend = inMemoryUserStorage.getById(friendId);
 
-        if(user != null && friend != null){
+        if (user != null && friend != null) {
             user.removeFriend(friendId);
             friend.removeFriend(userId);
 
