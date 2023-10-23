@@ -38,7 +38,7 @@ public class InMemoryFilmStorage extends AbstractStorage<Film> implements FilmSt
 
     @Override
     public Film getById(Long filmId) {
-        if(!storage.containsKey(filmId)){
+        if (!storage.containsKey(filmId)) {
             throw new DataNotFoundException(String.format("Фильм с ID: %d не найден!", filmId));
         } else {
             return storage.get(filmId);
