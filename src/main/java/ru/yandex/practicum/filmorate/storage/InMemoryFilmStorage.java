@@ -18,7 +18,7 @@ public class InMemoryFilmStorage extends AbstractStorage<Film> implements FilmSt
         validateDuration(data);
         validateReleaseDate(data);
     }
-    
+
     private void validateReleaseDate(Film film) {
         LocalDate releaseDate = film.getReleaseDate();
         LocalDate minReleaseDate = LocalDate.of(1895, 12, 28);
@@ -44,5 +44,4 @@ public class InMemoryFilmStorage extends AbstractStorage<Film> implements FilmSt
             return storage.get(filmId);
         }
     }
-
 }
