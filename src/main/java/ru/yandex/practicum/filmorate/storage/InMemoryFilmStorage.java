@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.storage;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.exception.DataNotFoundException;
 import ru.yandex.practicum.filmorate.exception.InvalidDurationException;
 import ru.yandex.practicum.filmorate.exception.InvalidReleaseDateException;
 import ru.yandex.practicum.filmorate.model.Entity;
@@ -16,7 +17,7 @@ public class InMemoryFilmStorage extends AbstractStorage<Film> implements FilmSt
     @Override
     public void validate(Film data) {
         validateDuration(data);
-        validateDuration(data);
+        validateReleaseDate(data);
     }
     
     private void validateReleaseDate(Film film) {
@@ -35,4 +36,14 @@ public class InMemoryFilmStorage extends AbstractStorage<Film> implements FilmSt
             throw new InvalidDurationException("Duration cannot be negative.");
         }
     }
+
+    @Override
+    public Film getById(Long filmId) {
+        if(!storage.containsKey(filmId)){
+            throw new DataNotFoundException(String.format("Фильм с ID: %d не найден!", filmId));
+        } else {
+            return storage.get(filmId);
+        }
+    }
+
 }
