@@ -8,7 +8,7 @@ import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
-import java.util.List;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -21,14 +21,83 @@ public class UserService  {
         this.inMemoryUserStorage = inMemoryUserStorage;
     }
 
-    public void addFriend(Long userId, Long friendId) {
+    public List<User> getAll(){
+        return inMemoryUserStorage.getAll();
     }
 
-    public void deleteFriend(Long userId, Long friendId) {
+    public User create(User user){
+        return inMemoryUserStorage.create(user);
     }
 
-    public List<Long> getCommonFriends(Long userId, Long otherId) {
-        return null;
+    public User update(User user){
+        return inMemoryUserStorage.update(user);
+    }
+
+    public User getUserById(Long id){
+        return inMemoryUserStorage.getById(id);
+    }
+
+    public List<User> getFriendsList(Long id){
+        List<User> friendsList = new ArrayList<>();
+        User user = inMemoryUserStorage.getById(id);
+
+        for (Long friend : user.getFriends()) {
+            friendsList.add(inMemoryUserStorage.getById(friend));
+        }
+
+        return friendsList;
+    }
+
+    public User addFriend(Long userId, Long friendId) {
+        User user = inMemoryUserStorage.getById(userId);
+        User friend = inMemoryUserStorage.getById(friendId);
+
+        if(user != null && friend != null){
+            user.addFriend(friendId);
+            friend.addFriend(userId);
+
+            inMemoryUserStorage.update(friend);
+            inMemoryUserStorage.update(user);
+        }
+
+        return user;
+    }
+
+    public User deleteFriend(Long userId, Long friendId) {
+        User user = inMemoryUserStorage.getById(userId);
+        User friend = inMemoryUserStorage.getById(friendId);
+
+        if(user != null && friend != null){
+            user.removeFriend(friendId);
+            friend.removeFriend(userId);
+
+            inMemoryUserStorage.update(friend);
+            inMemoryUserStorage.update(user);
+        }
+
+        return user;
+    }
+
+    public List<User> getCommonFriends(Long userId, Long otherId) {
+        User user = inMemoryUserStorage.getById(userId);
+        User otherUser = inMemoryUserStorage.getById(otherId);
+
+        if (user != null && otherUser != null) {
+            Set<Long> userFriends = user.getFriends();
+            Set<Long> otherUserFriends = otherUser.getFriends();
+
+            Set<Long> commonFriends = new HashSet<>(userFriends);
+            commonFriends.retainAll(otherUserFriends);
+
+        }
+
+        List<User> friendsList = new ArrayList<>();
+
+        for (Long friend : user.getFriends()) {
+            friendsList.add(inMemoryUserStorage.getById(friend));
+        }
+
+        return friendsList;
     }
 
 }
