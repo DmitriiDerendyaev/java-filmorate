@@ -13,7 +13,7 @@ import java.util.Set;
 
 @Slf4j
 @Service
-public class FilmService{
+public class FilmService {
 
     private final FilmStorage<Film> inMemoryFilmStorage;
 
@@ -52,7 +52,7 @@ public class FilmService{
 
         popularFilms.sort((film1, film2) -> Integer.compare(film2.getLikes().size(), film1.getLikes().size()));
 
-        if(count < popularFilms.size()){
+        if (count < popularFilms.size()) {
             return popularFilms.subList(0, count);
         } else {
             return popularFilms;
