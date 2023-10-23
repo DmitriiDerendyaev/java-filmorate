@@ -8,7 +8,7 @@ import ru.yandex.practicum.filmorate.model.User;
 
 @Component
 @Slf4j
-public class InMemoryUserStorage extends AbstractStorage<User> implements UserStorage<User>{
+public class InMemoryUserStorage extends AbstractStorage<User> implements UserStorage<User> {
     @Override
     public void validate(User data) {
         if (data == null) {
@@ -18,7 +18,7 @@ public class InMemoryUserStorage extends AbstractStorage<User> implements UserSt
 
     @Override
     public User getById(Long userId) {
-        if(!storage.containsKey(userId)){
+        if (!storage.containsKey(userId)) {
             throw new DataNotFoundException(String.format("Пользователь с ID: %d не найден!", userId));
         } else {
             return storage.get(userId);
