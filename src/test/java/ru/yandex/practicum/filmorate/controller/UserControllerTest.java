@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import ru.yandex.practicum.filmorate.exception.InvalidUser;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.UserService;
 import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
 import ru.yandex.practicum.filmorate.storage.StorageCRUD;
 
@@ -40,7 +41,7 @@ public class UserControllerTest {
 
         when(userStorage.getAll()).thenReturn(users);
 
-        UserController userController = new UserController((InMemoryUserStorage) userStorage);
+        UserController userController = new UserController((UserService) userStorage);
 
         ResponseEntity<List<User>> responseEntity = userController.getAllUsers();
 
@@ -71,7 +72,7 @@ public class UserControllerTest {
 
         when(userStorage.create(userToCreate)).thenReturn(createdUser);
 
-        UserController userController = new UserController((InMemoryUserStorage) userStorage);
+        UserController userController = new UserController((UserService) userStorage);
 
         ResponseEntity<User> responseEntity = userController.addUser(userToCreate);
 
@@ -92,7 +93,7 @@ public class UserControllerTest {
 
         when(userStorage.update(userToUpdate)).thenReturn(userToUpdate);
 
-        UserController userController = new UserController((InMemoryUserStorage) userStorage);
+        UserController userController = new UserController((UserService) userStorage);
 
         ResponseEntity<User> responseEntity = userController.updateUser(userToUpdate);
 
@@ -111,7 +112,7 @@ public class UserControllerTest {
                 .birthday(LocalDate.of(1990, 1, 1))
                 .build();
 
-        UserController userController = new UserController((InMemoryUserStorage) userStorage);
+        UserController userController = new UserController((UserService) userStorage);
 
         InvalidUser invalidUserException = assertThrows(InvalidUser.class, () -> {
             when(userStorage.update(validUser)).thenThrow(new InvalidUser("Unknown user"));

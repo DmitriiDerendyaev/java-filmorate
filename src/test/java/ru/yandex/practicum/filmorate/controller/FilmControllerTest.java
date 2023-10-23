@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import ru.yandex.practicum.filmorate.exception.InvalidFilm;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.service.FilmService;
 import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
 import ru.yandex.practicum.filmorate.storage.StorageCRUD;
 
@@ -40,7 +41,7 @@ public class FilmControllerTest {
 
         when(filmStorage.getAll()).thenReturn(films);
 
-        FilmController filmController = new FilmController((InMemoryFilmStorage) filmStorage);
+        FilmController filmController = new FilmController((FilmService) filmStorage);
 
         ResponseEntity<List<Film>> responseEntity = filmController.getAllFilms();
 
@@ -61,7 +62,7 @@ public class FilmControllerTest {
 
         when(filmStorage.create(filmToAdd)).thenReturn(filmToAdd);
 
-        FilmController filmController = new FilmController((InMemoryFilmStorage) filmStorage);
+        FilmController filmController = new FilmController((FilmService) filmStorage);
 
         ResponseEntity<Film> responseEntity = filmController.addFilm(filmToAdd);
 
@@ -82,7 +83,7 @@ public class FilmControllerTest {
 
         when(filmStorage.update(filmToUpdate)).thenReturn(filmToUpdate);
 
-        FilmController filmController = new FilmController((InMemoryFilmStorage) filmStorage);
+        FilmController filmController = new FilmController((FilmService) filmStorage);
 
         ResponseEntity<Film> responseEntity = filmController.updateFilm(filmToUpdate);
 
@@ -103,7 +104,7 @@ public class FilmControllerTest {
 
         when(filmStorage.update(filmToUpdate)).thenThrow(new InvalidFilm("Unknown film"));
 
-        FilmController filmController = new FilmController((InMemoryFilmStorage) filmStorage);
+        FilmController filmController = new FilmController((FilmService) filmStorage);
 
         InvalidFilm invalidFilmException = assertThrows(InvalidFilm.class, () -> {
             filmController.updateFilm(filmToUpdate);
