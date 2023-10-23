@@ -9,8 +9,8 @@ import java.util.List;
 
 public abstract class AbstractStorage<T extends Entity> implements StorageCRUD<T>{
 
-    private final HashMap<Integer, T> storage = new HashMap<>();
-    private int counter = 0;
+    protected final HashMap<Long, T> storage = new HashMap<>();
+    private Long counter = 0L;
 
     public abstract void validate(T data);
 

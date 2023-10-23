@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public abstract class Entity {
-    protected int id;
+    protected Long id;
 
 }
