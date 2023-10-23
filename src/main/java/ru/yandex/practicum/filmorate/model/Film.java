@@ -31,21 +31,20 @@ public class Film extends Entity {
     Duration duration;
 
     private Set<Long> likes;
-    
+
     public Film() {
-        // Инициализация likes в конструкторе
         likes = new HashSet<>();
     }
 
-    public Set<Long> getLikes(){
+    public Set<Long> getLikes() {
         return likes;
     }
 
-    public void addLike(Long userId){
+    public void addLike(Long userId) {
         likes.add(userId);
     }
 
-    public void removeLike(Long userId){
+    public void removeLike(Long userId) {
         likes.remove(userId);
     }
 
