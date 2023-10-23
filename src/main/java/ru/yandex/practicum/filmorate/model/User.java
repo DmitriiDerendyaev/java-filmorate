@@ -4,6 +4,8 @@ import lombok.*;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -21,6 +23,19 @@ public class User extends Entity {
     @Past(message = "Birthday cannot be in the future")
     LocalDate birthday;
 
+    private Set<Long> friends = new HashSet<>();
+
+    public void addFriend(Long friendId){
+        friends.add(friendId);
+    }
+
+    public void removeFriend(Long friendId){
+        friends.remove(friendId);
+    }
+
+    public Set<Long> getFriends(){
+        return friends;
+    }
     public String getName() {
         return (name != null && !name.isEmpty()) ? name : login;
     }
