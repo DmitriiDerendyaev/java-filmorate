@@ -7,10 +7,7 @@ import ru.yandex.practicum.filmorate.exception.DataNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
-import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
-import ru.yandex.practicum.filmorate.storage.StorageCRUD;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -25,19 +22,6 @@ public class FilmService{
         this.inMemoryFilmStorage = inMemoryFilmStorage;
     }
 
-//    public Film addLike(Long filmId, Long userId) {
-//        Film film = inMemoryFilmStorage.getById(filmId);
-//
-//        if (film != null) {
-//            Set<Long> likes = film.getLikes();
-//            if (!likes.contains(userId)) {
-//                likes.add(userId);
-//                inMemoryFilmStorage.update(film);
-//            }
-//        }
-//
-//        return film;
-//    }
 
     public Film addLike(Long filmId, Long userId) {
         Film film = inMemoryFilmStorage.getById(filmId);
