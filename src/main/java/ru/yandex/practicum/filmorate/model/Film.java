@@ -8,6 +8,8 @@ import lombok.EqualsAndHashCode;
 import javax.validation.constraints.*;
 import java.time.Duration;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 
 @EqualsAndHashCode(callSuper = true)
@@ -28,6 +30,23 @@ public class Film extends Entity {
 
     Duration duration;
 
+    private Set<Long> likes;
+
+    public Film() {
+        likes = new HashSet<>();
+    }
+
+    public Set<Long> getLikes() {
+        return likes;
+    }
+
+    public void addLike(Long userId) {
+        likes.add(userId);
+    }
+
+    public void removeLike(Long userId) {
+        likes.remove(userId);
+    }
 
     public long getDuration() {
         return duration.getSeconds();

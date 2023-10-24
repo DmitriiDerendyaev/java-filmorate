@@ -14,12 +14,14 @@ import java.util.List;
 @RestController
 @RequestMapping("/films")
 public class FilmController {
+
     private final FilmService filmService;
 
     @Autowired
     public FilmController(FilmService filmService) {
         this.filmService = filmService;
     }
+
 
     @GetMapping()
     public ResponseEntity<List<Film>> getAllFilms() {
@@ -39,4 +41,23 @@ public class FilmController {
         return ResponseEntity.ok(updatedFilm);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Film> getFilmById(@PathVariable Long id) {
+        return ResponseEntity.ok(filmService.getFilmById(id));
+    }
+
+    @PutMapping("/{id}/like/{userId}")
+    public ResponseEntity<Film> addLike(@PathVariable Long id, @PathVariable Long userId) {
+        return ResponseEntity.ok(filmService.addLike(id, userId));
+    }
+
+    @DeleteMapping("/{id}/like/{userId}")
+    public ResponseEntity<Film> deleteLike(@PathVariable Long id, @PathVariable Long userId) {
+        return ResponseEntity.ok(filmService.deleteLike(id, userId));
+    }
+
+    @GetMapping("/popular")
+    public ResponseEntity<List<Film>> getFilms(@RequestParam(required = false, defaultValue = "10") int count) {
+        return ResponseEntity.ok(filmService.getPopularFilms(count));
+    }
 }
