@@ -88,15 +88,18 @@ public class UserService  {
             Set<Long> commonFriends = new HashSet<>(userFriends);
             commonFriends.retainAll(otherUserFriends);
 
+            List<User> commonFriendsList = new ArrayList<>();
+            for (Long friendId : commonFriends) {
+                User commonFriend = inMemoryUserStorage.getById(friendId);
+                if (commonFriend != null) {
+                    commonFriendsList.add(commonFriend);
+                }
+            }
+            return commonFriendsList;
+        } else {
+            return Collections.emptyList();
         }
-
-        List<User> friendsList = new ArrayList<>();
-
-        for (Long friend : user.getFriends()) {
-            friendsList.add(inMemoryUserStorage.getById(friend));
-        }
-
-        return friendsList;
     }
+
 
 }
