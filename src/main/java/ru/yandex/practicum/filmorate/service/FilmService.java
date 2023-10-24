@@ -14,7 +14,6 @@ import java.util.Set;
 @Slf4j
 @Service
 public class FilmService {
-
     private final FilmStorage<Film> inMemoryFilmStorage;
 
     @Autowired
@@ -22,16 +21,17 @@ public class FilmService {
         this.inMemoryFilmStorage = inMemoryFilmStorage;
     }
 
-
     public Film addLike(Long filmId, Long userId) {
+        log.info("addLike() method called with filmId: {} and userId: {}", filmId, userId);
         Film film = inMemoryFilmStorage.getById(filmId);
         film.addLike(userId);
         inMemoryFilmStorage.update(film);
-
+        log.info("addLike() method completed successfully.");
         return film;
     }
 
     public Film deleteLike(Long filmId, Long userId) {
+        log.info("deleteLike() method called with filmId: {} and userId: {}", filmId, userId);
         Film film = inMemoryFilmStorage.getById(filmId);
 
         if (film != null) {
@@ -40,39 +40,55 @@ public class FilmService {
                 likes.remove(userId);
                 inMemoryFilmStorage.update(film);
             } else {
+                log.error("Like not found.");
                 throw new DataNotFoundException("Like not found");
             }
         }
-
+        log.info("deleteLike() method completed successfully.");
         return film;
     }
 
     public List<Film> getPopularFilms(int count) {
+        log.info("getPopularFilms() method called with count: {}", count);
         List<Film> popularFilms = inMemoryFilmStorage.getAll();
 
         popularFilms.sort((film1, film2) -> Integer.compare(film2.getLikes().size(), film1.getLikes().size()));
 
         if (count < popularFilms.size()) {
+            log.info("getPopularFilms() method completed successfully.");
             return popularFilms.subList(0, count);
         } else {
+            log.info("getPopularFilms() method completed successfully.");
             return popularFilms;
         }
     }
 
-
     public List<Film> getAll() {
-        return inMemoryFilmStorage.getAll();
+        log.info("getAll() method called.");
+        List<Film> result = inMemoryFilmStorage.getAll();
+        log.info("getAll() method completed successfully.");
+        return result;
     }
 
     public Film create(Film film) {
-        return inMemoryFilmStorage.create(film);
+        log.info("create() method called with film: {}", film);
+        Film result = inMemoryFilmStorage.create(film);
+        log.info("create() method completed successfully. Created film: {}", result);
+        return result;
     }
 
     public Film update(Film film) {
-        return inMemoryFilmStorage.update(film);
+        log.info("update() method called with film: {}", film);
+        Film result = inMemoryFilmStorage.update(film);
+        log.info("update() method completed successfully. Updated film: {}", result);
+        return result;
     }
 
     public Film getFilmById(Long filmId) {
-        return inMemoryFilmStorage.getById(filmId);
+        log.info("getFilmById() method called with filmId: {}", filmId);
+        Film result = inMemoryFilmStorage.getById(filmId);
+        log.info("getFilmById() method completed successfully. Film: {}", result);
+        return result;
     }
 }
+
