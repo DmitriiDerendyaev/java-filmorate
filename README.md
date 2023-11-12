@@ -1,5 +1,4 @@
 # java-filmorate
-
 ## Описание ER-диагрммы базы данных
 ![img.png](img.png)
 [Ссылка на miro](https://miro.com/welcomeonboard/RWZ6WXhPZktORXg0RFVKbXhoR1hIemJGNnp4MmhtQU03VWR6SzVyZllneXJyVWVaWnZrM1hGRTBXejF6cEV5NXwzMDc0NDU3MzUyMDc1MzQ1MzQxfDI=?share_link_id=372657932937)
