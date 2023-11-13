@@ -18,12 +18,6 @@ public class ErrorHandler {
 
     private static final Logger log = LoggerFactory.getLogger(ErrorHandler.class);
 
-//    @ExceptionHandler(MethodArgumentNotValidException.class)
-//    public ResponseEntity<String> handleMethodArgumentTypeMismatch(MethodArgumentNotValidException ex) {
-//        String message = "Invalid parameter type: " + ex.getMessage();
-//        return ResponseEntity.badRequest().body(message);
-//    }
-
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleValidationException(final ValidationException e) {
