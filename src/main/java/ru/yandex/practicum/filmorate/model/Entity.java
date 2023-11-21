@@ -1,12 +1,12 @@
 package ru.yandex.practicum.filmorate.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @NoArgsConstructor
+@EqualsAndHashCode(of = {"id"})
 @AllArgsConstructor
+@Builder
 public abstract class Entity {
     protected Long id;
 

@@ -15,13 +15,13 @@ import java.util.Set;
 public class User extends Entity {
     @Email(message = "Invalid email format")
     @NotBlank(message = "Email is required")
-    String email;
+    private String email;
     @NotBlank(message = "Login is required")
     @Pattern(regexp = "^[^\\s]+$", message = "Login cannot contain spaces")
-    String login;
-    String name;
+    private String login;
+    private String userName;
     @Past(message = "Birthday cannot be in the future")
-    LocalDate birthday;
+    private LocalDate birthday;
 
     private Set<Long> friends = new HashSet<>();
 
@@ -38,6 +38,6 @@ public class User extends Entity {
     }
 
     public String getName() {
-        return (name != null && !name.isEmpty()) ? name : login;
+        return (userName != null && !userName.isEmpty()) ? userName : login;
     }
 }

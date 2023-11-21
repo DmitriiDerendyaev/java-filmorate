@@ -8,7 +8,9 @@ import lombok.EqualsAndHashCode;
 import javax.validation.constraints.*;
 import java.time.Duration;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
@@ -20,15 +22,23 @@ public class Film extends Entity {
 
     @NotNull
     @NotBlank(message = "Name is required")
-    String name;
+    private String name;
 
     @Size(max = 200, message = "Description cannot be more 200 character")
-    String description;
+    private String description;
 
     @Past(message = "Release must be in past")
-    LocalDate releaseDate;
+    private LocalDate releaseDate;
 
-    Duration duration;
+    @Positive(message = "Duration must be greater then zero")
+    private long duration;
+
+    @NotNull
+    private Mpa mpa;
+
+    private List<Genre> genres = new ArrayList<>();
+
+    private int rate = 0;
 
     private Set<Long> likes;
 
@@ -49,10 +59,10 @@ public class Film extends Entity {
     }
 
     public long getDuration() {
-        return duration.getSeconds();
+        return duration;
     }
 
-    public Duration getDurationValue() {
+    public long getDurationValue() {
         return duration;
     }
 }
