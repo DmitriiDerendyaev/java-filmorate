@@ -1,94 +1,98 @@
 package ru.yandex.practicum.filmorate.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.DataNotFoundException;
+import ru.yandex.practicum.filmorate.exception.NoInformationFoundException;
+import ru.yandex.practicum.filmorate.exception.ObjectNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.storage.FilmStorage;
-import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
+import ru.yandex.practicum.filmorate.storage.db.film.FilmDb;
+import ru.yandex.practicum.filmorate.storage.db.user.UserDb;
 
+import javax.validation.ValidationException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class FilmService {
-    private final FilmStorage<Film> inMemoryFilmStorage;
-
-    @Autowired
-    public FilmService(InMemoryFilmStorage inMemoryFilmStorage) {
-        this.inMemoryFilmStorage = inMemoryFilmStorage;
-    }
+    private final FilmDb filmStorage;
+    private final UserDb userStorage;
+    private static final String FILM_BIRTHDAY = "1895-12-28";
 
     public Film addLike(Long filmId, Long userId) {
         log.info("addLike() method called with filmId: {} and userId: {}", filmId, userId);
-        Film film = inMemoryFilmStorage.getById(filmId);
-        film.addLike(userId);
-        inMemoryFilmStorage.update(film);
-        log.info("addLike() method completed successfully.");
-        return film;
+        if (!filmStorage.containsFilm(filmId)) {
+            throw new NoInformationFoundException(String.format("Film with id=%d not found", filmId));
+        }
+        if (!userStorage.containsUser(userId)) {
+            throw new NoInformationFoundException(String.format("User with id=%d not found", userId));
+        }
+        filmStorage.likeFilm(filmId, userId);
+        log.info("Liked the movie");
+        return filmStorage.findById(filmId);
     }
 
     public Film deleteLike(Long filmId, Long userId) {
         log.info("deleteLike() method called with filmId: {} and userId: {}", filmId, userId);
-        Film film = inMemoryFilmStorage.getById(filmId);
-
-        if (film != null) {
-            Set<Long> likes = film.getLikes();
-            if (likes.contains(userId)) {
-                likes.remove(userId);
-                inMemoryFilmStorage.update(film);
-            } else {
-                log.error("Like not found.");
-                throw new DataNotFoundException("Like not found");
-            }
+        if (filmId <= 0 || userId <= 0) {
+            throw new ObjectNotFoundException("Film's and User's id must be over 0");
         }
-        log.info("deleteLike() method completed successfully.");
-        return film;
+
+        if (!filmStorage.containsFilm(filmId)) {
+            throw new NoInformationFoundException(String.format("Film with id=%d not found", filmId));
+        }
+        if (!userStorage.containsUser(userId)) {
+            throw new NoInformationFoundException(String.format("User with id=%d not found", userId));
+        }
+        filmStorage.deleteLike(filmId, userId);
+        log.info("Like deleted");
+        return filmStorage.findById(filmId);
     }
 
-    public List<Film> getPopularFilms(int count) {
+    public List<Film> getPopularFilms(long count) {
         log.info("getPopularFilms() method called with count: {}", count);
-        List<Film> popularFilms = inMemoryFilmStorage.getAll();
-
-        popularFilms.sort((film1, film2) -> Integer.compare(film2.getLikes().size(), film1.getLikes().size()));
-
-        if (count < popularFilms.size()) {
-            log.info("getPopularFilms() method completed successfully.");
-            return popularFilms.subList(0, count);
-        } else {
-            log.info("getPopularFilms() method completed successfully.");
-            return popularFilms;
+        if (count <= 0) {
+            throw new ValidationException("Count must be over 0");
         }
+        return filmStorage.bestFilms(count);
     }
 
     public List<Film> getAll() {
-        log.info("getAll() method called.");
-        List<Film> result = inMemoryFilmStorage.getAll();
-        log.info("getAll() method completed successfully.");
-        return result;
+        return filmStorage.findAllFilms();
     }
 
     public Film create(Film film) {
-        log.info("create() method called with film: {}", film);
-        Film result = inMemoryFilmStorage.create(film);
-        log.info("create() method completed successfully. Created film: {}", result);
-        return result;
+        if (film.getId() != null) {
+            throw new ValidationException("ID must be empty");
+        }
+        if (film.getReleaseDate().isBefore(LocalDate.parse(FILM_BIRTHDAY))) {
+            throw new ValidationException("Time of release must be after" + FILM_BIRTHDAY);
+        }
+        return filmStorage.create(film);
     }
 
     public Film update(Film film) {
         log.info("update() method called with film: {}", film);
-        Film result = inMemoryFilmStorage.update(film);
-        log.info("update() method completed successfully. Updated film: {}", result);
-        return result;
+        if (!filmStorage.containsFilm(film.getId())) {
+            throw new ObjectNotFoundException("There is no such film in the database");
+        }
+
+        if (film.getReleaseDate().isBefore(LocalDate.parse(FILM_BIRTHDAY))) {
+            throw new ValidationException("Time of release must be after" + FILM_BIRTHDAY);
+        }
+        return filmStorage.rewriteFilm(film);
     }
 
     public Film getFilmById(Long filmId) {
         log.info("getFilmById() method called with filmId: {}", filmId);
-        Film result = inMemoryFilmStorage.getById(filmId);
-        log.info("getFilmById() method completed successfully. Film: {}", result);
-        return result;
+        if (!filmStorage.containsFilm(filmId)) {
+            throw new ObjectNotFoundException("Film with not found, id = " + filmId);
+        }
+        return filmStorage.findById(filmId);
     }
 }
 
