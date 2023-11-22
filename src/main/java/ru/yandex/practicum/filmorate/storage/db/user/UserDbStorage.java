@@ -101,7 +101,7 @@ public class UserDbStorage implements UserDb {
             user.setId(resultSet.getLong("user_id"));
             user.setEmail(resultSet.getString("email"));
             user.setLogin(resultSet.getString("login"));
-            user.setUserName(resultSet.getString("user_name"));
+            user.setName(resultSet.getString("user_name"));
             user.setBirthday(resultSet.getDate("birthday").toLocalDate());
             return user;
         } catch (Exception e) {

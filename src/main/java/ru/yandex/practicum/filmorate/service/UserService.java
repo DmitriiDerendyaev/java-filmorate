@@ -37,7 +37,7 @@ public class UserService {
             throw new ValidationException("The login cannot contain spaces");
         }
         if (user.getName() == null || user.getName().isBlank()) {
-            user.setUserName(user.getLogin());
+            user.setName(user.getLogin());
         }
         return userStorage.createUser(user);
     }
@@ -51,7 +51,7 @@ public class UserService {
             throw new ValidationException("The login cannot contain spaces");
         }
         if (user.getName() == null || user.getName().isBlank()) {
-            user.setUserName(user.getLogin());
+            user.setName(user.getLogin());
         }
         return userStorage.updateUser(user);
     }
