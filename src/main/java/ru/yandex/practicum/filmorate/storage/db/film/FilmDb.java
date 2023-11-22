@@ -6,9 +6,13 @@ import java.util.List;
 
 public interface FilmDb {
     List<Film> findAllFilms();
+
     Film create(Film film);
+
     Film rewriteFilm(Film film);
+
     Film findById(Long id);
+
     boolean containsFilm(Long id);
 
     void likeFilm(Long id, Long userId);
