@@ -19,15 +19,15 @@ public class MpaController {
 
     private final MpaService mpaService;
 
-//    @GetMapping
-//    public List<Mpa> getAllMpa() {
-//        final List<Mpa> mpa = mpaService.getAll();
-//        log.info("Get all genres - {}", mpa);
-//        return mpa;
-//    }
-//
-//    @GetMapping("/{id}")
-//    public Mpa getMpaById(@PathVariable int id) {
-//        return mpaService.getById(id);
-//    }
+    @GetMapping
+    public List<Mpa> getAllMpa() {
+        final List<Mpa> mpa = mpaService.getMpa();
+        log.info("Get all genres - {}", mpa);
+        return mpa;
+    }
+
+    @GetMapping("/{id}")
+    public Mpa getMpaById(@PathVariable Long id) {
+        return mpaService.getMpaById(id);
+    }
 }
