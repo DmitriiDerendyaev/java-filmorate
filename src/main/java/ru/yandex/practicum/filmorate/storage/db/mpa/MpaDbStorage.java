@@ -45,7 +45,7 @@ public class MpaDbStorage implements MpaDb {
                 (resultSet, rowNum) -> {
                     Mpa newMpa = new Mpa();
                     newMpa.setId(id);
-                    newMpa.setRating(resultSet.getString("mpa_name"));
+                    newMpa.setName(resultSet.getString("rating"));
                     return newMpa;
                 }, id);
     }
