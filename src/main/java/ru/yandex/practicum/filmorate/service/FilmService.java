@@ -3,7 +3,6 @@ package ru.yandex.practicum.filmorate.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.exception.DataNotFoundException;
 import ru.yandex.practicum.filmorate.exception.NoInformationFoundException;
 import ru.yandex.practicum.filmorate.exception.ObjectNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
@@ -13,7 +12,6 @@ import ru.yandex.practicum.filmorate.storage.db.user.UserDb;
 import javax.validation.ValidationException;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
 
 @Slf4j
 @Service

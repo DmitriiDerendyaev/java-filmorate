@@ -58,10 +58,8 @@ public Film create(Film film) {
         String sqlQuery = "UPDATE films SET name=?, description=?, release_date=?, duration=?, MPA_ID=? WHERE film_id=? ";
         jdbcTemplate.update(sqlQuery, film.getName(), film.getDescription(), film.getReleaseDate(), film.getDuration(), film.getMpa().getId(), film.getId());
 
-        // Удаление старых записей в таблице film_genre
         jdbcTemplate.update("DELETE FROM film_genre WHERE film_id=?", film.getId());
 
-        // Вставка новых записей в таблицу film_genre
         insertGenresInTable(film);
 
         Long mpaId = film.getMpa().getId();
@@ -79,13 +77,6 @@ public Film create(Film film) {
             }
         }
     }
-
-//    public void insertGenresInTable(Film film) {
-//        long[] genresIds = film.getGenres().stream().mapToLong(Genre::getId).toArray();
-//        for (long genreId : genresIds) {
-//            jdbcTemplate.update("INSERT INTO film_genre(film_id, genre_id) VALUES (?,?)", film.getId(), genreId);
-//        }
-//    }
 
     private boolean genreExistsInFilmGenreTable(Long filmId, Long genreId) {
         String sqlQuery = "SELECT COUNT(*) FROM film_genre WHERE film_id = ? AND genre_id = ?";
