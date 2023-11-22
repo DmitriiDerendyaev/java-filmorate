@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+@Deprecated
 public abstract class AbstractStorage<T extends Entity> implements StorageCRUD<T> {
 
     protected final HashMap<Long, T> storage = new HashMap<>();

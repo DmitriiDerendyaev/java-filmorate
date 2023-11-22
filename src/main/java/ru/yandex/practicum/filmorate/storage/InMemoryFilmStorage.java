@@ -10,6 +10,7 @@ import ru.yandex.practicum.filmorate.model.Film;
 import java.time.Duration;
 import java.time.LocalDate;
 
+@Deprecated
 @Component
 @Slf4j
 public class InMemoryFilmStorage extends AbstractStorage<Film> implements FilmStorage<Film> {
@@ -29,8 +30,7 @@ public class InMemoryFilmStorage extends AbstractStorage<Film> implements FilmSt
     }
 
     private void validateDuration(Film film) {
-        Duration duration = film.getDurationValue();
-        if (duration.isNegative()) {
+        if (film.getDurationValue() <= 0) {
             log.warn("Duration cannot be negative.");
             throw new InvalidDurationException("Duration cannot be negative.");
         }

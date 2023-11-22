@@ -4,6 +4,7 @@ import ru.yandex.practicum.filmorate.model.Entity;
 
 import java.util.List;
 
+@Deprecated
 public interface StorageCRUD<T extends Entity> {
 
     public List<T> getAll();
