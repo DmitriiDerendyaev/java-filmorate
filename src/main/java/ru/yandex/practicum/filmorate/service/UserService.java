@@ -30,7 +30,7 @@ public class UserService {
 
     public User create(User user) {
         log.info("create() method called with user: {}", user);
-        if (user.getId() != 0) {
+        if (user.getId() != null) {
             throw new ValidationException("ID must be empty");
         }
         if (user.getLogin().contains(" ")) {
