@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
-public class FilmDbStorage implements FilmDb{
+public class FilmDbStorage implements FilmDb {
 
     private final JdbcTemplate jdbcTemplate;
 
