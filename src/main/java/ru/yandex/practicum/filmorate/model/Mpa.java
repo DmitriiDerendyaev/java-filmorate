@@ -11,10 +11,10 @@ import javax.validation.constraints.NotBlank;
 public class Mpa extends Entity {
 
     @NotBlank
-    private String rating;
+    private String name;
 
-    public Mpa(Long id, String rating) {
+    public Mpa(Long id, String name) {
         super(id);
-        this.rating = rating;
+        this.name = name;
     }
 }

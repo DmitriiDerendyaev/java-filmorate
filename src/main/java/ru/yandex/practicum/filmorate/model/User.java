@@ -16,10 +16,12 @@ public class User extends Entity {
     @Email(message = "Invalid email format")
     @NotBlank(message = "Email is required")
     private String email;
+
     @NotBlank(message = "Login is required")
     @Pattern(regexp = "^[^\\s]+$", message = "Login cannot contain spaces")
     private String login;
-    private String userName;
+
+    private String name;
     @Past(message = "Birthday cannot be in the future")
     private LocalDate birthday;
 
@@ -38,6 +40,6 @@ public class User extends Entity {
     }
 
     public String getName() {
-        return (userName != null && !userName.isEmpty()) ? userName : login;
+        return (name != null && !name.isEmpty()) ? name : login;
     }
 }
