@@ -57,14 +57,41 @@ public Film create(Film film) {
     public Film rewriteFilm(Film film) {
         String sqlQuery = "UPDATE films SET name=?, description=?, release_date=?, duration=?, MPA_ID=? WHERE film_id=? ";
         jdbcTemplate.update(sqlQuery, film.getName(), film.getDescription(), film.getReleaseDate(), film.getDuration(), film.getMpa().getId(), film.getId());
+
+        // Удаление старых записей в таблице film_genre
         jdbcTemplate.update("DELETE FROM film_genre WHERE film_id=?", film.getId());
+
+        // Вставка новых записей в таблицу film_genre
         insertGenresInTable(film);
+
         Long mpaId = film.getMpa().getId();
         film.setMpa(findMpaFilm(mpaId));
         film.setGenres(findGenresFilm(film));
         film.setRate(findRateFilm(Math.toIntExact(film.getId())));
         return film;
     }
+
+    private void insertGenresInTable(Film film) {
+        for (Genre genre : film.getGenres()) {
+            // Проверка наличия записи в таблице перед вставкой
+            if (!genreExistsInFilmGenreTable(film.getId(), genre.getId())) {
+                jdbcTemplate.update("INSERT INTO film_genre(film_id, genre_id) VALUES (?, ?)", film.getId(), genre.getId());
+            }
+        }
+    }
+
+//    public void insertGenresInTable(Film film) {
+//        long[] genresIds = film.getGenres().stream().mapToLong(Genre::getId).toArray();
+//        for (long genreId : genresIds) {
+//            jdbcTemplate.update("INSERT INTO film_genre(film_id, genre_id) VALUES (?,?)", film.getId(), genreId);
+//        }
+//    }
+
+    private boolean genreExistsInFilmGenreTable(Long filmId, Long genreId) {
+        String sqlQuery = "SELECT COUNT(*) FROM film_genre WHERE film_id = ? AND genre_id = ?";
+        return jdbcTemplate.queryForObject(sqlQuery, Integer.class, filmId, genreId) > 0;
+    }
+
 
     @Override
     public Film findById(Long id) {
@@ -147,13 +174,5 @@ public Film create(Film film) {
             genres.add(genre);
         }
         return genres;
-    }
-
-    public void insertGenresInTable(Film film) {
-        long[] genresIds = film.getGenres().stream().mapToLong(Genre::getId).toArray();
-        for (long genreId : genresIds) {
-            jdbcTemplate.update("INSERT INTO film_genre(film_id, genre_id) VALUES (?,?)",
-                    film.getId(), genreId);
-        }
     }
 }

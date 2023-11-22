@@ -34,7 +34,7 @@ public class GenreDbStorage implements GenreDb {
                 (resultSet, rowNum) -> {
                     Genre newGenre = new Genre();
                     newGenre.setId(id);
-                    newGenre.setName(resultSet.getString("genre_name"));
+                    newGenre.setName(resultSet.getString("name"));
                     return newGenre;
                 }, id);
     }
@@ -51,7 +51,7 @@ public class GenreDbStorage implements GenreDb {
 
     private Genre mapRowToGenre(ResultSet resultSet, int rowNum) throws SQLException {
         Long id = resultSet.getLong("genre_id");
-        String name = resultSet.getString("genre_name");
+        String name = resultSet.getString("name");
 
         Genre genre = new Genre(id, name);
         return genre;
