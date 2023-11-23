@@ -19,7 +19,6 @@ import java.util.Set;
 @Builder
 public class Film extends Entity {
 
-    @NotNull
     @NotBlank(message = "Name is required")
     private String name;
 
