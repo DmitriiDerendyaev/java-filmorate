@@ -1,9 +1,6 @@
 package ru.yandex.practicum.filmorate.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
@@ -16,6 +13,7 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @AllArgsConstructor
+@RequiredArgsConstructor
 @Builder
 public class Film extends Entity {
 
@@ -38,29 +36,7 @@ public class Film extends Entity {
 
     private int rate = 0;
 
-    private Set<Long> likes;
-
-    public Film() {
-        likes = new HashSet<>();
-    }
-
-    public Set<Long> getLikes() {
-        return likes;
-    }
-
-    public void addLike(Long userId) {
-        likes.add(userId);
-    }
-
-    public void removeLike(Long userId) {
-        likes.remove(userId);
-    }
-
     public long getDuration() {
-        return duration;
-    }
-
-    public long getDurationValue() {
         return duration;
     }
 }
