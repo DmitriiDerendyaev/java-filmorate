@@ -55,17 +55,13 @@ public Film create(Film film) {
 
     @Override
     public Film rewriteFilm(Film film) {
-        // Обновление информации о фильме в таблице films
         String updateFilmQuery = "UPDATE films SET name=?, description=?, release_date=?, duration=?, MPA_ID=? WHERE film_id=?";
         jdbcTemplate.update(updateFilmQuery, film.getName(), film.getDescription(), film.getReleaseDate(), film.getDuration(), film.getMpa().getId(), film.getId());
 
-        // Удаление всех записей жанров для фильма
         jdbcTemplate.update("DELETE FROM film_genre WHERE film_id=?", film.getId());
 
-        // Пакетная вставка жанров с проверкой наличия записи перед вставкой
         insertGenresInTableWithCheck(film);
 
-        // Получение обновленной информации о фильме
         Long mpaId = film.getMpa().getId();
         film.setMpa(findMpaFilm(mpaId));
         film.setGenres(findGenresFilm(film));
@@ -75,32 +71,15 @@ public Film create(Film film) {
 
     private void insertGenresInTableWithCheck(Film film) {
         for (Genre genre : film.getGenres()) {
-            // Проверка наличия записи перед вставкой
-            String checkIfExistsQuery = "SELECT COUNT(*) FROM film_genre WHERE film_id=? AND genre_id=?";
-            int count = jdbcTemplate.queryForObject(checkIfExistsQuery, Integer.class, film.getId(), genre.getId());
+            String checkIfExistsQuery = "SELECT EXISTS(SELECT 1 FROM film_genre WHERE film_id = ? AND genre_id = ?)";
+            boolean exists = jdbcTemplate.queryForObject(checkIfExistsQuery, Boolean.class, film.getId(), genre.getId());
 
-            if (count == 0) {
-                // Запись не существует, выполните вставку
+            if (!exists) {
                 jdbcTemplate.update("INSERT INTO film_genre(film_id, genre_id) VALUES (?, ?)", film.getId(), genre.getId());
             }
-            // Иначе запись уже существует, можно выполнить дополнительные действия, если необходимо
         }
     }
 
-//    private void insertGenresInTable(Film film) {
-//        List<Object[]> batchArgs = new ArrayList<>();
-//
-//        for (Genre genre : film.getGenres()) {
-//            if (!genreExistsInFilmGenreTable(film.getId(), genre.getId())) {
-//                batchArgs.add(new Object[]{film.getId(), genre.getId()});
-//            }
-//        }
-//
-//        if (!batchArgs.isEmpty()) {
-//            String sqlQuery = "INSERT INTO film_genre(film_id, genre_id) VALUES (?, ?)";
-//            jdbcTemplate.batchUpdate(sqlQuery, batchArgs);
-//        }
-//    }
 
 
     private boolean genreExistsInFilmGenreTable(Long filmId, Long genreId) {
