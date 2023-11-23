@@ -1,13 +1,12 @@
 package ru.yandex.practicum.filmorate.model;
 
 import lombok.*;
+import ru.yandex.practicum.filmorate.model.validateGroup.UpdateGroup;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 
 @EqualsAndHashCode(callSuper = true)
@@ -17,19 +16,19 @@ import java.util.Set;
 @Builder
 public class Film extends Entity {
 
-    @NotBlank(message = "Name is required")
+    @NotBlank(message = "Name is required", groups = {UpdateGroup.class})
     private String name;
 
-    @Size(max = 200, message = "Description cannot be more 200 character")
+    @Size(max = 200, message = "Description cannot be more 200 character", groups = {UpdateGroup.class})
     private String description;
 
-    @Past(message = "Release must be in past")
+    @Past(message = "Release must be in past", groups = {UpdateGroup.class})
     private LocalDate releaseDate;
 
-    @Positive(message = "Duration must be greater then zero")
+    @Positive(message = "Duration must be greater then zero", groups = {UpdateGroup.class})
     private long duration;
 
-    @NotNull
+    @NotNull(groups = {UpdateGroup.class})
     private Mpa mpa;
 
     private List<Genre> genres = new ArrayList<>();
