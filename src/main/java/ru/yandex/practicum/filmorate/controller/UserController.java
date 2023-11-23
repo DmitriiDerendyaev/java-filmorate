@@ -24,46 +24,42 @@ public class UserController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<User>> getAllUsers() {
-        List<User> userList = userService.getAll();
-        return ResponseEntity.ok(userList);
+    public List<User> getAllUsers() {
+        return userService.getAll();
     }
 
     @PostMapping()
-    public ResponseEntity<User> addUser(@Valid @RequestBody User user) {
-        User addedUser = userService.create(user);
-        return ResponseEntity.ok(addedUser);
+    public User addUser(@Valid @RequestBody User user) {
+        return userService.create(user);
     }
 
     @PutMapping
-    public ResponseEntity<User> updateUser(@Valid @RequestBody User user) {
-        User updatedUser = userService.update(user);
-        return ResponseEntity.ok(updatedUser);
+    public User updateUser(@Valid @RequestBody User user) {
+        return userService.update(user);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
-        System.out.printf(userService.getUserById(id).toString());
-        return ResponseEntity.ok(userService.getUserById(id));
+    public User getUserById(@PathVariable Long id) {
+        return userService.getUserById(id);
     }
 
     @PutMapping("/{id}/friends/{friendId}")
-    public ResponseEntity<User> addFriend(@PathVariable Long id, @PathVariable Long friendId) {
-        return ResponseEntity.ok(userService.addFriend(id, friendId));
+    public User addFriend(@PathVariable Long id, @PathVariable Long friendId) {
+        return userService.addFriend(id, friendId);
     }
 
     @DeleteMapping("/{id}/friends/{friendId}")
-    public ResponseEntity<User> deleteFriend(@PathVariable Long id, @PathVariable Long friendId) {
-        return ResponseEntity.ok(userService.deleteFriend(id, friendId));
+    public User deleteFriend(@PathVariable Long id, @PathVariable Long friendId) {
+        return userService.deleteFriend(id, friendId));
     }
 
     @GetMapping("/{id}/friends")
-    public ResponseEntity<List<User>> getFriends(@PathVariable Long id) {
-        return ResponseEntity.ok(userService.getFriendsList(id));
+    public List<User> getFriends(@PathVariable Long id) {
+        return userService.getFriendsList(id);
     }
 
     @GetMapping("/{id}/friends/common/{otherId}")
-    public ResponseEntity<List<User>> getMutualFriends(@PathVariable Long id, @PathVariable Long otherId) {
-        return ResponseEntity.ok(userService.getCommonFriends(id, otherId));
+    public List<User> getMutualFriends(@PathVariable Long id, @PathVariable Long otherId) {
+        return userService.getCommonFriends(id, otherId);
     }
 }
