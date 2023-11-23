@@ -5,8 +5,6 @@ import ru.yandex.practicum.filmorate.model.validateGroup.UpdateGroup;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
