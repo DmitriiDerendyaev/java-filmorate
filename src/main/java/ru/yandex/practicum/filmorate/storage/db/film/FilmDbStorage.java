@@ -31,7 +31,7 @@ public class FilmDbStorage implements FilmDb {
     }
 
     @Override
-public Film create(Film film) {
+    public Film create(Film film) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         String sqlQuery = "INSERT INTO films (name, description, release_date, duration, mpa_id) VALUES (?, ?, ?, ?, ?)";
         jdbcTemplate.update(connection -> {
@@ -70,17 +70,22 @@ public Film create(Film film) {
     }
 
     private void insertGenresInTableWithCheck(Film film) {
+        String checkIfExistsQuery = "SELECT COUNT(*) FROM film_genre WHERE film_id = ? AND genre_id = ?";
+        List<Object[]> batchArgs = new ArrayList<>();
+
         for (Genre genre : film.getGenres()) {
-            String checkIfExistsQuery = "SELECT EXISTS(SELECT 1 FROM film_genre WHERE film_id = ? AND genre_id = ?)";
-            boolean exists = jdbcTemplate.queryForObject(checkIfExistsQuery, Boolean.class, film.getId(), genre.getId());
+            boolean exists = jdbcTemplate.queryForObject(checkIfExistsQuery, Integer.class, film.getId(), genre.getId()) > 0;
 
             if (!exists) {
-                jdbcTemplate.update("INSERT INTO film_genre(film_id, genre_id) VALUES (?, ?)", film.getId(), genre.getId());
+                batchArgs.add(new Object[]{film.getId(), genre.getId()});
             }
         }
+
+        if (!batchArgs.isEmpty()) {
+            String insertQuery = "INSERT INTO film_genre(film_id, genre_id) VALUES (?, ?)";
+            jdbcTemplate.batchUpdate(insertQuery, batchArgs);
+        }
     }
-
-
 
     private boolean genreExistsInFilmGenreTable(Long filmId, Long genreId) {
         String sqlQuery = "SELECT COUNT(*) FROM film_genre WHERE film_id = ? AND genre_id = ?";
