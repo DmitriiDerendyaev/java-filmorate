@@ -24,7 +24,7 @@ public class FilmDbStorage implements FilmDb {
     @Override
     public List<Film> findAllFilms() {
         return jdbcTemplate.query(
-                "SELECT * FROM films",
+                "SELECT films.*, mpa.rating FROM films JOIN mpa ON films.mpa_id = mpa.mpa_id",
                 (resultSet, rowNum) -> filmParameters(resultSet));
     }
 
@@ -99,7 +99,7 @@ public class FilmDbStorage implements FilmDb {
     @Override
     public Film findById(Long id) {
         return jdbcTemplate.queryForObject(
-                "SELECT * FROM films WHERE film_id=?",
+                "SELECT films.*, mpa.rating FROM films JOIN mpa ON films.mpa_id = mpa.mpa_id WHERE film_id=?",
                 (resultSet, rowNum) -> filmParameters(resultSet), id);
     }
 
@@ -127,10 +127,10 @@ public class FilmDbStorage implements FilmDb {
 
     @Override
     public List<Film> bestFilms(Long count) {
-        List<Film> films = jdbcTemplate.query(
-                "SELECT * FROM films",
-                (resultSet, rowNum) -> filmParameters(resultSet));
-        return films.stream()
+        return jdbcTemplate.query(
+                        "SELECT films.*, mpa.rating FROM films JOIN mpa ON films.mpa_id = mpa.mpa_id",
+                        (resultSet, rowNum) -> filmParameters(resultSet))
+                .stream()
                 .sorted((x1, x2) -> x2.getRate() - x1.getRate())
                 .limit(count)
                 .collect(Collectors.toList());
@@ -144,7 +144,13 @@ public class FilmDbStorage implements FilmDb {
             film.setDescription(resultSet.getString("description"));
             film.setReleaseDate(resultSet.getDate("release_date").toLocalDate());
             film.setDuration(resultSet.getInt("duration"));
-            film.setMpa(findMpaFilm(resultSet.getLong("mpa_id")));
+
+            // Устанавливаем информацию о рейтинге
+            Mpa mpa = new Mpa();
+            mpa.setId(resultSet.getLong("mpa_id"));
+            mpa.setName(resultSet.getString("rating"));
+            film.setMpa(mpa);
+
             film.setGenres(findGenresFilm(film));
             film.setRate(findRateFilm(Math.toIntExact(film.getId())));
             return film;
@@ -152,6 +158,7 @@ public class FilmDbStorage implements FilmDb {
             throw new RuntimeException(e);
         }
     }
+
 
     public Integer findRateFilm(Integer id) {
         return this.jdbcTemplate.queryForObject("select count(user_id) from likes WHERE film_id=?", Integer.class, id);
