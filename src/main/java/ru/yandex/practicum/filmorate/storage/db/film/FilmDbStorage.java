@@ -164,12 +164,15 @@ public class FilmDbStorage implements FilmDb {
     }
 
     public List<Genre> findGenresFilm(Film film) {
-        List<Integer> genresIds = jdbcTemplate.queryForList("SELECT film_genre.genre_id FROM film_genre WHERE film_id=?", Integer.class, film.getId());
+        List<Integer> genresIds = jdbcTemplate.queryForList(
+                "SELECT film_genre.genre_id FROM film_genre " +
+                        "JOIN genres ON film_genre.genre_id = genres.genre_id " +
+                        "WHERE film_id=?", Integer.class, film.getId());
+
         List<Genre> genres = new ArrayList<>();
         for (Integer j : genresIds) {
             Genre genre = new Genre();
-            String str = jdbcTemplate.queryForObject("SELECT name FROM genres WHERE genre_id=?", String.class, j);
-            genre.setName(str);
+            genre.setName(jdbcTemplate.queryForObject("SELECT name FROM genres WHERE genre_id=?", String.class, j));
             genre.setId(Long.valueOf(j));
             genres.add(genre);
         }
