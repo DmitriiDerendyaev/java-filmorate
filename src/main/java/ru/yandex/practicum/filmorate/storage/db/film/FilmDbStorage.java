@@ -44,10 +44,10 @@ public class FilmDbStorage implements FilmDb {
 
         film.setId(Objects.requireNonNull(keyHolder.getKey()).longValue());
 
-        if (film.getGenres().stream().mapToLong(Genre::getId).toArray() != null) {
-            insertGenresInTableWithCheck(film);
-            film.setGenres(findGenresFilm(film));
-        }
+        insertGenresInTableWithCheck(film);
+
+        film.setGenres(findGenresFilm(film));
+
         return film;
     }
 
@@ -72,7 +72,6 @@ public class FilmDbStorage implements FilmDb {
         String removeDuplicatesQuery = "DELETE FROM film_genre WHERE film_id = ? AND genre_id = ?";
         List<Object[]> batchArgs = new ArrayList<>();
 
-        // Удаление дубликатов из списка жанров
         Set<Long> uniqueGenreIds = new HashSet<>();
         List<Genre> uniqueGenres = new ArrayList<>();
         for (Genre genre : film.getGenres()) {
@@ -96,13 +95,6 @@ public class FilmDbStorage implements FilmDb {
             jdbcTemplate.batchUpdate(insertQuery, batchArgs);
         }
     }
-
-
-    private boolean genreExistsInFilmGenreTable(Long filmId, Long genreId) {
-        String sqlQuery = "SELECT COUNT(*) FROM film_genre WHERE film_id = ? AND genre_id = ?";
-        return jdbcTemplate.queryForObject(sqlQuery, Integer.class, filmId, genreId) > 0;
-    }
-
 
     @Override
     public Film findById(Long id) {
@@ -179,9 +171,6 @@ public class FilmDbStorage implements FilmDb {
             String str = jdbcTemplate.queryForObject("SELECT name FROM genres WHERE genre_id=?", String.class, j);
             genre.setName(str);
             genre.setId(Long.valueOf(j));
-            if (genres.contains(genre)) {
-                break;
-            }
             genres.add(genre);
         }
         return genres;
