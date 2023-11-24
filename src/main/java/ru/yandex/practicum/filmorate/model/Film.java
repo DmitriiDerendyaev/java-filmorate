@@ -1,58 +1,41 @@
 package ru.yandex.practicum.filmorate.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
+import ru.yandex.practicum.filmorate.model.validateGroup.UpdateGroup;
 
 import javax.validation.constraints.*;
-import java.time.Duration;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @EqualsAndHashCode(callSuper = true)
 @Data
 @AllArgsConstructor
+@RequiredArgsConstructor
 @Builder
 public class Film extends Entity {
 
-    @NotNull
-    @NotBlank(message = "Name is required")
-    String name;
+    @NotBlank(message = "Name is required", groups = {UpdateGroup.class})
+    private String name;
 
-    @Size(max = 200, message = "Description cannot be more 200 character")
-    String description;
+    @Size(max = 200, message = "Description cannot be more 200 character", groups = {UpdateGroup.class})
+    private String description;
 
-    @Past(message = "Release must be in past")
-    LocalDate releaseDate;
+    @Past(message = "Release must be in past", groups = {UpdateGroup.class})
+    private LocalDate releaseDate;
 
-    Duration duration;
+    @Positive(message = "Duration must be greater then zero", groups = {UpdateGroup.class})
+    private long duration;
 
-    private Set<Long> likes;
+    @NotNull(groups = {UpdateGroup.class})
+    private Mpa mpa;
 
-    public Film() {
-        likes = new HashSet<>();
-    }
+    private List<Genre> genres = new ArrayList<>();
 
-    public Set<Long> getLikes() {
-        return likes;
-    }
-
-    public void addLike(Long userId) {
-        likes.add(userId);
-    }
-
-    public void removeLike(Long userId) {
-        likes.remove(userId);
-    }
+    private int rate = 0;
 
     public long getDuration() {
-        return duration.getSeconds();
-    }
-
-    public Duration getDurationValue() {
         return duration;
     }
 }
