@@ -12,9 +12,7 @@ import ru.yandex.practicum.filmorate.model.Mpa;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Repository
@@ -70,11 +68,23 @@ public class FilmDbStorage implements FilmDb {
     }
 
     private void insertGenresInTableWithCheck(Film film) {
-        String checkIfExistsQuery = "SELECT COUNT(*) FROM film_genre WHERE film_id = ? AND genre_id = ?";
+        String checkIfExistsQuery = "SELECT EXISTS(SELECT 1 FROM film_genre WHERE film_id = ? AND genre_id = ?)";
+        String removeDuplicatesQuery = "DELETE FROM film_genre WHERE film_id = ? AND genre_id = ?";
         List<Object[]> batchArgs = new ArrayList<>();
 
+        // Удаление дубликатов из списка жанров
+        Set<Long> uniqueGenreIds = new HashSet<>();
+        List<Genre> uniqueGenres = new ArrayList<>();
         for (Genre genre : film.getGenres()) {
-            boolean exists = jdbcTemplate.queryForObject(checkIfExistsQuery, Integer.class, film.getId(), genre.getId()) > 0;
+            if (uniqueGenreIds.add(genre.getId())) {
+                uniqueGenres.add(genre);
+            } else {
+                jdbcTemplate.update(removeDuplicatesQuery, film.getId(), genre.getId());
+            }
+        }
+
+        for (Genre genre : uniqueGenres) {
+            boolean exists = jdbcTemplate.queryForObject(checkIfExistsQuery, Boolean.class, film.getId(), genre.getId());
 
             if (!exists) {
                 batchArgs.add(new Object[]{film.getId(), genre.getId()});
@@ -86,6 +96,7 @@ public class FilmDbStorage implements FilmDb {
             jdbcTemplate.batchUpdate(insertQuery, batchArgs);
         }
     }
+
 
     private boolean genreExistsInFilmGenreTable(Long filmId, Long genreId) {
         String sqlQuery = "SELECT COUNT(*) FROM film_genre WHERE film_id = ? AND genre_id = ?";
