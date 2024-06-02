@@ -69,11 +69,45 @@ CREATE TABLE friendship
     FOREIGN KEY (friend_id) REFERENCES users(user_id),
     status boolean
 ); -- Создание таблицы связей между пользователями, являющимися друзьями
-    
 
 
 
 
+INSERT INTO mpa (mpa_id, rating) values (1, 'G');
+INSERT INTO mpa (mpa_id, rating) values (2, 'PG');
+INSERT INTO mpa (mpa_id, rating) values (3, 'PG-13');
+INSERT INTO mpa (mpa_id, rating) values (4, 'R');
+INSERT INTO mpa (mpa_id, rating) values (5, 'NC-17');
+
+INSERT INTO genres (genre_id, name) values (1, 'Комедия');
+INSERT INTO genres (genre_id, name) values (2, 'Драма');
+INSERT INTO genres (genre_id, name) values (3, 'Мультфильм');
+INSERT INTO genres (genre_id, name) values (4, 'Триллер');
+INSERT INTO genres (genre_id, name) values (5, 'Документальный');
+INSERT INTO genres (genre_id, name) values (6, 'Боевик');
+
+-- Обнуление счетчика инкрементации для таблицы mpa
+ALTER TABLE mpa ALTER COLUMN mpa_id RESTART WITH 1;
+
+-- Обнуление счетчика инкрементации для таблицы genres
+ALTER TABLE genres ALTER COLUMN genre_id RESTART WITH 1;
+
+-- Обнуление счетчика инкрементации для таблицы films
+ALTER TABLE films ALTER COLUMN film_id RESTART WITH 1;
+
+-- Обнуление счетчика инкрементации для таблицы users
+ALTER TABLE users ALTER COLUMN user_id RESTART WITH 1;
+
+-- Обнуление счетчика инкрементации для таблицы film_genre (эта таблица использует film_id, который уже был обнулен)
+ALTER TABLE film_genre ALTER COLUMN film_id RESTART WITH 1;
+
+-- Обнуление счетчика инкрементации для таблицы likes (эта таблица использует film_id и user_id, которые уже были обнулены)
+ALTER TABLE likes ALTER COLUMN film_id RESTART WITH 1;
+ALTER TABLE likes ALTER COLUMN user_id RESTART WITH 1;
+
+-- Обнуление счетчика инкрементации для таблицы friendship (эта таблица использует user_id и friend_id, которые уже были обнулены)
+ALTER TABLE friendship ALTER COLUMN user_id RESTART WITH 1;
+ALTER TABLE friendship ALTER COLUMN friend_id RESTART WITH 1;
 
 ```
 
