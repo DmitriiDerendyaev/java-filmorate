@@ -61,6 +61,7 @@ CREATE TABLE IF NOT EXISTS users
     email varchar(200) NOT NULL,
     login varchar(255) NOT NULL,
     user_name varchar(255),
+    password varchar(255) NOT NULL,
     birthday date CHECK ( birthday < current_date )
 ); -- Создание таблицы для работы с пользователем
 

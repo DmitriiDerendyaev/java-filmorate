@@ -31,13 +31,14 @@ public class UserDbStorage implements UserDb {
     @Override
     public User createUser(User user) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        String sqlQuery = "INSERT INTO users (email, login, user_name, birthday) VALUES (?, ?, ?, ?)";
+        String sqlQuery = "INSERT INTO users (email, login, user_name, password, birthday) VALUES (?, ?, ?, ?, ?)";
         jdbcTemplate.update(connection -> {
             PreparedStatement stmt = connection.prepareStatement(sqlQuery, new String[]{"user_id"});
             stmt.setString(1, user.getEmail());
             stmt.setString(2, user.getLogin());
             stmt.setString(3, user.getName());
-            stmt.setDate(4, Date.valueOf(user.getBirthday()));
+            stmt.setString(4, user.getPassword());
+            stmt.setDate(5, Date.valueOf(user.getBirthday()));
             return stmt;
         }, keyHolder);
 
@@ -47,9 +48,15 @@ public class UserDbStorage implements UserDb {
 
     @Override
     public User updateUser(User user) {
-        String sqlQuery = "UPDATE users SET email=?, login=?, user_name=?, birthday=? WHERE user_id = ?";
-        jdbcTemplate.update(sqlQuery, user.getEmail(), user.getLogin(), user.getName(), user.getBirthday(), user.getId());
+        String sqlQuery = "UPDATE users SET email=?, login=?, user_name=?, password=?, birthday=? WHERE user_id = ?";
+        jdbcTemplate.update(sqlQuery, user.getEmail(), user.getLogin(), user.getName(), user.getPassword(), user.getBirthday(), user.getId());
         return user;
+    }
+
+    public User getUserByLogin(String login) {
+        String sql = "SELECT * FROM users WHERE login=?";
+        List<User> users = jdbcTemplate.query(sql, (resultSet, rowNum) -> userParameters(resultSet), login);
+        return users.isEmpty() ? null : users.get(0);
     }
 
     @Override
@@ -95,7 +102,7 @@ public class UserDbStorage implements UserDb {
         return firstId;
     }
 
-    public User userParameters(ResultSet resultSet) {
+    private User userParameters(ResultSet resultSet) {
         try {
             User user = new User();
             user.setId(resultSet.getLong("user_id"));
@@ -103,6 +110,8 @@ public class UserDbStorage implements UserDb {
             user.setLogin(resultSet.getString("login"));
             user.setName(resultSet.getString("user_name"));
             user.setBirthday(resultSet.getDate("birthday").toLocalDate());
+            String encryptedPassword = resultSet.getString("password");
+            user.setPassword(encryptedPassword);
             return user;
         } catch (Exception e) {
             throw new RuntimeException(e);

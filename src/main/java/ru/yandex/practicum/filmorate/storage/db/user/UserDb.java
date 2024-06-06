@@ -14,6 +14,8 @@ public interface UserDb {
 
     User findById(Long id);
 
+    User getUserByLogin(String login);
+
     boolean containsUser(Long id);
 
     void addFriends(Long id, Long friendId);

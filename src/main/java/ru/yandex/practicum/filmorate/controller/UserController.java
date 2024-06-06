@@ -2,6 +2,8 @@ package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.User;
@@ -14,6 +16,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/users")
+@CrossOrigin(origins = "http://localhost:8081")
 public class UserController {
 
     private final UserService userService;
@@ -21,6 +24,16 @@ public class UserController {
     @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody User user) {
+        log.info("Users data: {}", user.toString());
+        if (userService.authenticateUser(user.getLogin(), user.getPassword())) {
+            return ResponseEntity.ok("User authenticated successfully!");
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+        }
     }
 
     @GetMapping()
