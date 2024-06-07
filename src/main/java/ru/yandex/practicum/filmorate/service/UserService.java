@@ -65,6 +65,11 @@ public class UserService {
         return userStorage.findById(id);
     }
 
+    public User getUserByLogin(String login) {
+        log.info("getUserByLogin() method called with login: {}", login);
+        return userStorage.getUserByLogin(login);
+    }
+
     public List<User> getFriendsList(Long id) {
         log.info("getFriendsList() method called with id: {}", id);
         if (id <= 0) {

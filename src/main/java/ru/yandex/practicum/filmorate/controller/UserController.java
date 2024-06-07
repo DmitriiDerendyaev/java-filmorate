@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.exception.DataNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.model.validateGroup.UpdateGroup;
 import ru.yandex.practicum.filmorate.service.UserService;
@@ -27,12 +28,12 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody User user) {
+    public ResponseEntity<User> login(@RequestBody User user) {
         log.info("Users data: {}", user.toString());
         if (userService.authenticateUser(user.getLogin(), user.getPassword())) {
-            return ResponseEntity.ok("User authenticated successfully!");
+            return ResponseEntity.ok(userService.getUserByLogin(user.getLogin()));
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+            throw new DataNotFoundException("User with ID: " + user.getId() + " not found");
         }
     }
 
