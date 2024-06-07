@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.NoInformationFoundException;
 import ru.yandex.practicum.filmorate.model.User;
@@ -17,6 +18,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class UserService {
     private final UserDb userStorage;
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public List<User> getAll() {
         log.info("getAll() method called.");
@@ -36,6 +38,7 @@ public class UserService {
         if (user.getName() == null || user.getName().isBlank()) {
             user.setName(user.getLogin());
         }
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userStorage.createUser(user);
     }
 
@@ -50,6 +53,7 @@ public class UserService {
         if (user.getName() == null || user.getName().isBlank()) {
             user.setName(user.getLogin());
         }
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userStorage.updateUser(user);
     }
 
@@ -59,6 +63,11 @@ public class UserService {
             throw new ObjectNotFoundException(String.format("User c id=%d not exist", id));
         }
         return userStorage.findById(id);
+    }
+
+    public User getUserByLogin(String login) {
+        log.info("getUserByLogin() method called with login: {}", login);
+        return userStorage.getUserByLogin(login);
     }
 
     public List<User> getFriendsList(Long id) {
@@ -121,4 +130,14 @@ public class UserService {
         log.info("List of common friends done");
         return userStorage.commonFriends(userId, otherId);
     }
+
+    public boolean authenticateUser(String login, String password) {
+        User user = userStorage.getUserByLogin(login);
+        if (user != null) {
+            // Проверяем соответствие пароля
+            return passwordEncoder.matches(password, user.getPassword());
+        }
+        return false;
+    }
+
 }

@@ -21,6 +21,10 @@ public class User extends Entity {
     private String login;
 
     private String name;
+
+    @NotBlank(message = "Password is required", groups = {UpdateGroup.class})
+    private String password;
+
     @Past(message = "Birthday cannot be in the future", groups = {UpdateGroup.class})
     private LocalDate birthday;
 
