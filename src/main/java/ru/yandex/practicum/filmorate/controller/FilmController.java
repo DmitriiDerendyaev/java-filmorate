@@ -29,11 +29,6 @@ public class FilmController {
         return filmService.getAll();
     }
 
-    @GetMapping("/news")
-    public String getNews() {
-        return "news in progress to deploy";
-    }
-
     @PostMapping
     public Film addFilm(@Validated(UpdateGroup.class) @RequestBody final Film film) {
         return filmService.create(film);
